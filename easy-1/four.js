@@ -11,4 +11,4 @@ let roomWidth = readlineSync.question('And what is the width of your room? ');
 let squareMeters = roomLength * roomWidth;
 let squareFeet = squareMeters * 10.764;
 
-console.log(`Your room is: ${squareMeters} square meters or ${squareFeet} square feet`);
+console.log(`Your room is: ${squareMeters.toFixed(2)} square meters or ${squareFeet.toFixed(2)} square feet`);
