@@ -15,11 +15,11 @@ console.log(allNumbers);
 
 if (operation === 's') {    
     let sum = allNumbers.reduce((accumulator, currentValue) => accumulator + currentValue);
-    console.log(sum);
+    console.log(`The sum of the integers between 1 and ${num} is ${sum}`);
 
 } else if (operation === 'p') {
     let product = allNumbers.reduce((accumulator, currentValue) => accumulator * currentValue);
-    console.log(product);
+    console.log(`The product of the integers between 1 and ${num} is ${product}`);
 } else {
     console.log('Not a valid entry.')
 }
