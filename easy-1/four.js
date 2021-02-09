@@ -19,5 +19,3 @@ if (inputType === 'meters') {
 } else {
     console.log(`Your room is: ${squareFeet.toFixed(2)} square feet`)
 }
-
-// console.log(`Your room is: ${squareMeters.toFixed(2)} square meters or ${squareFeet.toFixed(2)} square feet`);
