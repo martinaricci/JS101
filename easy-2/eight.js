@@ -20,7 +20,7 @@ console.log(oddities([])); // logs []
 // Try to solve this exercise in a different way.
 
 evenIndex = arr => {
-    let evens = arr.filter(index => !arr[index] % 2 == 0);
+    let evens = arr.filter((_, index) => index % 2 == 1);
     return evens;
 }
 
