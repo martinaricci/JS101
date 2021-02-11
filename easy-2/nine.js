@@ -2,7 +2,10 @@
 
 // You may not use any of the standard conversion methods available in JavaScript, such as String() and Number(). Your function should do this the old-fashioned way and calculate the result by analyzing the characters in the string.
 
-let str = "4781";
+
+// MY FIRST SOLUTION (which is wrong because it's returning an array of numbers)
+
+let str = "32232781";
 
 const DIGITS = {
     0 : 0,
@@ -17,11 +20,9 @@ const DIGITS = {
     9 : 9
 }
 
-checkString = str => {
+stringToInteger = str => {
     strToArr = str.split('');
-    // console.log(strToArr);
     objToArr = Object.values(DIGITS);
-    // console.log(objToArr);
     let strToNum = []
 
     for (let i = 0; i < strToArr.length; i++) {
@@ -34,4 +35,21 @@ checkString = str => {
     return strToNum;
 }
 
-console.log(checkString(str));
+console.log(stringToInteger(str));
+
+
+// SECOND SOLUTION (but it felt too easy to be true)
+stringToInteger = str => {
+    return str * 1;
+}
+
+console.log(stringToInteger(str));
+
+
+// function stringToInteger(string) {
+//   const ZERO_OFFSET = '0'.charCodeAt();
+
+//   return string.split('').reverse().reduce((acc, char, index) => { return acc + (char.charCodeAt() - ZERO_OFFSET) * 10**index; }, 0);
+// }
+
+// console.log(stringToInteger(str));
