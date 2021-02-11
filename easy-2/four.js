@@ -12,3 +12,9 @@ square = num => {
 
 console.log(square(5) === 25); // logs true
 console.log(square(-8) === 64); // logs true
+
+powerToTheN = (num, esponent) => {
+    return Math.pow(num, esponent);
+}
+
+console.log(powerToTheN(7, 3));
