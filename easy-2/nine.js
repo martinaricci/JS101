@@ -45,11 +45,46 @@ stringToInteger = str => {
 
 console.log(stringToInteger(str));
 
+// FURTHER EXPLORATION
+// Write a hexadecimalToInteger() function that converts a string representing a hexadecimal number to its integer value. Note that hexadecimal numbers use base 16 instead of 10, and the "digits" A, B, C, D, E, and F (and the lowercase equivalents) correspond to decimal values of 10-15.
 
-// function stringToInteger(string) {
-//   const ZERO_OFFSET = '0'.charCodeAt();
+hexadecimalToInteger = (string) => {
+    const DIGITS = {
+        0 : 0,
+        1 : 1,
+        2 : 2,
+        3 : 3,
+        4 : 4,
+        5 : 5,
+        6 : 6,
+        7 : 7,
+        8 : 8,
+        9 : 9,
+        A : 10,
+        B : 11,
+        C : 12,
+        D : 13,
+        E : 14,
+        F : 15,
+        a : 10,
+        b : 11,
+        c : 12,
+        d : 13,
+        e : 14,
+        f : 15
+    };
+    let arrayOfDigits = string.split("").map(char => DIGITS[char]);
+    let value = 0;
+    let index = 3;
+    for (let i = 0; i < arrayOfDigits.length; i++) {
+        // console.log(index);
+        value += (arrayOfDigits[i] * 16 ** (index))
+        if (index === 0) {
+            break;
+        } 
+        index -= 1;
+    }
+    return value;
+}
 
-//   return string.split('').reverse().reduce((acc, char, index) => { return acc + (char.charCodeAt() - ZERO_OFFSET) * 10**index; }, 0);
-// }
-
-// console.log(stringToInteger(str));
+console.log(hexadecimalToInteger('4D9f'))
