@@ -8,6 +8,7 @@ fibonacci = num => {
 
 findFibonacciIndexByLength = length => {
     let num = 0;
+    let index = 1;
     let res;
     for (let i = 0; num >= 0; i++) {
         let fibonacciNum = fibonacci(num);
@@ -17,8 +18,9 @@ findFibonacciIndexByLength = length => {
             break;
         }
         num++;
+        index++;
     }
-    return res;
+    return index;
 
 }
 
