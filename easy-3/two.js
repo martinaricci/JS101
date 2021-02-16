@@ -9,13 +9,27 @@
 logInBox = (str, width) => {                                
     let emptySpaces = '';
     let dashes = '';
-    if (str.length > width) {
-        str = str.substring(0, width);
-        console.log(str);
-    }
+    // if (str.length > width) {
+    //     // str = str.substring(0, width);
+    //     // for (let i = 0; i < str.length; i++) {
+    //         if (str.length % width == 0) {
+    //             str = str + '\n';
+    //         }
+    //     // }
+    //     console.log(str);
+    // }
     let lineOfString = '| ' + str + ' |';
-
+    
     if (width !== undefined) {
+        let spliter = str.split('');
+        console.log(spliter);
+        let result = [];
+        if (spliter.length > width) {
+            for (let i = 0; i < spliter.length; i++) {
+                console.log(spliter.indexOf(spliter[i]))
+            }
+        }
+        console.log(str);
         for (let i = 0; i < width; i++) {
             emptySpaces += ' ';
             dashes += '-';
@@ -34,4 +48,5 @@ logInBox = (str, width) => {
 }
 
 logInBox('To boldly go where no one has gone before.', 20);
+
 
