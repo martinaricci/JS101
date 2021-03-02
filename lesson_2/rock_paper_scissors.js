@@ -9,35 +9,34 @@ let answer = '';
 let yourWins = 0;
 let computerWins = 0;
 
-displayResults = (num1, num2) => {
+let displayResults = (num1, num2) => {
   if (num1 === 5) {
     console.log('You are the grand winner');
   } else if (num2 === 5) {
     console.log("The computer is the grand winner");
   }
-}
+};
 
 while (!((yourWins === 5) || (computerWins === 5))) {
   prompt(`Choose one: 'r' for ${VALID_CHOICES[0]}, 'p' for ${VALID_CHOICES[1]}, 'sc' for ${VALID_CHOICES[2]}, 'l' for ${VALID_CHOICES[3]}, 's' for ${VALID_CHOICES[4]}`);
   let choice = readline.question();
-  
+
   let initialOfChoicesInArr = [];
-  
-  for (let i = 0; i < VALID_CHOICES.length; i++) { 
-    if (VALID_CHOICES[i] === 'scissors') {
-      initialOfChoicesInArr.push(VALID_CHOICES[i].charAt(0) + VALID_CHOICES[i].charAt(1));
+
+  for (let idx = 0; idx < VALID_CHOICES.length; idx++) {
+    if (VALID_CHOICES[idx] === 'scissors') {
+      initialOfChoicesInArr.push(VALID_CHOICES[idx].charAt(0) + VALID_CHOICES[idx].charAt(1));
     } else {
-      initialOfChoicesInArr.push(VALID_CHOICES[i].charAt(0));
+      initialOfChoicesInArr.push(VALID_CHOICES[idx].charAt(0));
     }
   }
 
-  
   while (!initialOfChoicesInArr.includes(choice)) {
-      prompt("That's not a valid choice");
-      choice = readline.question();
-  };
-  
-  switch(choice) {
+    prompt("That's not a valid choice");
+    choice = readline.question();
+  }
+
+  switch (choice) {
     case 'r':
       choice = 'rock';
       break;
@@ -57,9 +56,9 @@ while (!((yourWins === 5) || (computerWins === 5))) {
 
   let randomIndex = Math.floor(Math.random() * VALID_CHOICES.length);
   let computerChoice = VALID_CHOICES[randomIndex];
-  
+
   prompt(`You chose ${choice}, computer chose ${computerChoice}`);
-  
+
   if ((choice === 'rock' && computerChoice === 'scissors') ||
       (choice === 'paper' && computerChoice === 'rock') ||
       (choice === 'scissors' && computerChoice === 'paper') ||
@@ -77,7 +76,7 @@ while (!((yourWins === 5) || (computerWins === 5))) {
   } else {
     prompt("It's a tie");
   }
-  
+
   console.log(`Your wins: ${yourWins}`);
   console.log(`Computer wins: ${computerWins}`);
   displayResults(yourWins, computerWins);
@@ -92,4 +91,4 @@ while (!((yourWins === 5) || (computerWins === 5))) {
       answer = readline.question().toLowerCase();
     }
   }
-};
+}
