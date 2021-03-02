@@ -6,8 +6,18 @@ function prompt(message) {
 }
 
 let answer = '';
+let yourWins = 0;
+let computerWins = 0;
 
-do {
+displayResults = (num1, num2) => {
+  if (num1 === 5) {
+    console.log('You are the grand winner');
+  } else if (num2 === 5) {
+    console.log("The computer is the grand winner");
+  }
+}
+
+while (!((yourWins === 5) || (computerWins === 5))) {
   prompt(`Choose one: 'r' for ${VALID_CHOICES[0]}, 'p' for ${VALID_CHOICES[1]}, 'sc' for ${VALID_CHOICES[2]}, 'l' for ${VALID_CHOICES[3]}, 's' for ${VALID_CHOICES[4]}`);
   let choice = readline.question();
   
@@ -19,7 +29,6 @@ do {
     } else {
       initialOfChoicesInArr.push(VALID_CHOICES[i].charAt(0));
     }
-    console.log(initialOfChoicesInArr);
   }
 
   
@@ -57,21 +66,30 @@ do {
       (choice === 'rock' && computerChoice === 'lizard') ||
       (choice === 'lizard' && computerChoice === 'spock')) {
     prompt('You win!');
+    yourWins += 1;
   } else if ((choice === 'rock' && computerChoice === 'paper') ||
-             (choice === 'paper' && computerChoice === 'scissors') ||
-             (choice === 'scissors' && computerChoice === 'rock') ||
-             (choice === 'scissors' && computerChoice === 'spock') ||
-             (choice === 'spock' && computerChoice === 'lizard')) {
+  (choice === 'paper' && computerChoice === 'scissors') ||
+  (choice === 'scissors' && computerChoice === 'rock') ||
+  (choice === 'scissors' && computerChoice === 'spock') ||
+  (choice === 'spock' && computerChoice === 'lizard')) {
     prompt('Computer wins!');
+    computerWins += 1;
   } else {
     prompt("It's a tie");
   }
   
-  prompt('Do you want to play again (y/n)?');
-  answer = readline.question().toLowerCase();
-  while (answer[0] !== 'n' && answer[0] !== 'y') {
-    prompt('Please enter "y" or "n".');
-    answer = readline.question().toLowerCase();
-  }
+  console.log(`Your wins: ${yourWins}`);
+  console.log(`Computer wins: ${computerWins}`);
+  displayResults(yourWins, computerWins);
+  console.log(yourWins);
+  console.log(computerWins);
 
-} while (answer[0] == 'y');
+  if (!((yourWins === 5) || (computerWins === 5))) {
+    prompt('Do you want to play again (y/n)?');
+    answer = readline.question().toLowerCase();
+    while (answer[0] !== 'n' && answer[0] !== 'y') {
+      prompt('Please enter "y" or "n".');
+      answer = readline.question().toLowerCase();
+    }
+  }
+};
