@@ -6,15 +6,23 @@ let isInvalidNumber = (number) => {
          Number.isNaN(Number(number));
 }
 
-let isInvalidInterestrate = (number) => {
+let isInvalidInterestRate = (number) => {
   return number.toString().trim() === '' ||
          Number(number) <= 0   ||
          Number.isNaN(Number(number));
 }
 
-let isNotPositiveInteger = (number) => {
-  return !Number.isInteger(number);
+let isNotValidInteger = (number) => {
+  return !Number.isInteger(number) ||
+          number === 0;
 }
+
+
+// let removeDollarSign = (sign) => {
+//   if (sign[0] === '$') {
+//     sign = sign.substring(1);
+//   }
+// }
 
 let convertStrToNum = (str) => {
   str = Number(str);
@@ -27,22 +35,22 @@ do {
   // =========================================================================
   // LOAN AMOUNT
   let loanAmount = readline.question('How much do you want to borrow?: ');
-  // if the user types $ sign in front of the amount remove it from the string 
   if (loanAmount[0] === '$') {
     loanAmount = loanAmount.substring(1);
   }
+  // removeDollarSign(loanAmount);
 
   convertStrToNum(loanAmount);
-  console.log(`$${loanAmount}`);
+  console.log(`${loanAmount}`);
 
   while (isInvalidNumber(loanAmount)) {
     console.log('Must be a valid positive number and use numbers only');
 
     loanAmount = readline.question('How much do you want to borrow?: ');
+    // removeDollarSign(loanAmount);
     if (loanAmount[0] === '$') {
       loanAmount = loanAmount.substring(1);
     }
-
     convertStrToNum(loanAmount);
     console.log(`$${loanAmount}`);
   }
@@ -59,9 +67,9 @@ do {
   convertStrToNum(APR);
   console.log(`${APR}%`);
   let APRInFranctional = APR / 100;
-  console.log(APRInFranctional);
+  // console.log(APRInFranctional);
 
-  while (isInvalidInterestrate(APR)) {
+  while (isInvalidInterestRate(APR)) {
     console.log('Must be a valid positive number');
     APR = readline.question('What is the Annual Percentage Rate?: ');
 
@@ -71,7 +79,7 @@ do {
 
     convertStrToNum(APR);
     APRInFranctional = APR / 100;
-    console.log(APRInFranctional);
+    // console.log(APRInFranctional);
     console.log(`${APR}%`);
   }
 
@@ -86,7 +94,7 @@ do {
     years = Number(readline.question('What is the loan duration in years?: '));
   }
 
-  while (isNotPositiveInteger(years)) {
+  while (isNotValidInteger(years)) {
     console.log('The loan duration must be at least one year.');
     years = Number(readline.question('What is the loan duration in years?: '));
     console.log(years)
