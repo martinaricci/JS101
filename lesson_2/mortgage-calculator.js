@@ -123,9 +123,12 @@ do {
 
   // DO YOU WANT TO KEEP GOING?
   answer = '';
-  while (answer !== 'n' && answer !== 'y') {
+  do {
     answer = readline.question("Would you like to do another calculation? \nType 'y' for yes, 'n' for no: ");
-  }
+    if (answer !== 'n' && answer !== 'y') {
+      console.log('Please give a valid answer.');
+    }
+  } while (answer !== 'n' && answer !== 'y');
 
   if (answer === 'n') {
     break;
