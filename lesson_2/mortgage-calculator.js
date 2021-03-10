@@ -4,106 +4,116 @@ let isInvalidNumber = (number) => {
   return number.toString().trim() === '' ||
          Number(number) < 0   ||
          Number.isNaN(Number(number));
-}
+};
 
 let isInvalidInterestRate = (number) => {
   return number.toString().trim() === '' ||
          Number(number) <= 0   ||
          Number.isNaN(Number(number));
-}
+};
 
 let isNotValidInteger = (number) => {
   return !Number.isInteger(number) ||
           number === 0;
-}
+};
 
-
-// let removeDollarSign = (sign) => {
-//   if (sign[0] === '$') {
-//     sign = sign.substring(1);
-//   }
-// }
+let removeDollarSign = (sign) => {
+  if (sign[0] === '$') {
+    sign = sign.substring(1);
+  }
+  return sign;
+};
 
 let convertStrToNum = (str) => {
   str = Number(str);
-}
+  return str;
+};
+
+let removePercentageSign = (sign) => {
+  if (sign[sign.length - 1] === '%') {
+    sign = sign.slice(0, -1);
+  }
+  return sign;
+};
+
+// get loan amount
+let getLoanAmount = () => {
+  let numberIsInvalid = true;
+  let loanAmount = 0;
+
+  while (numberIsInvalid) {
+    loanAmount = readline.question('How much do you want to borrow?: ');
+    loanAmount = removeDollarSign(loanAmount);
+    loanAmount = convertStrToNum(loanAmount);
+    numberIsInvalid = isInvalidNumber(loanAmount);
+    if (numberIsInvalid === true) {
+      console.log('Must be a valid positive number and use numbers only');
+    }
+  }
+  console.log(loanAmount);
+  return loanAmount;
+};
+
+// get APR
+let getAPR = () => {
+  let numberIsInvalid = true;
+  let APR = 0;
+
+  while (numberIsInvalid) {
+    APR = readline.question('What is the Annual Percentage Rate?: ');
+    APR = removePercentageSign(APR);
+    APR = convertStrToNum(APR);
+    numberIsInvalid = isInvalidInterestRate(APR);
+    if (numberIsInvalid) {
+      console.log('Must be a valid positive number');
+    }
+  }
+  console.log(`${APR}%`);
+  return APR;
+};
+
+// get loan duration
+let getLoanDuration = () => {
+  let numberIsInvalid = true;
+  let integerIsInvalid = true;
+  let years = 0;
+
+  while (numberIsInvalid || integerIsInvalid) {
+    years = readline.question('What is the loan duration in years?: ');
+    years = convertStrToNum(years);
+    numberIsInvalid = isInvalidNumber (years);
+    integerIsInvalid = isNotValidInteger(years);
+    if (numberIsInvalid) {
+      console.log('Must be a valid positive number');
+    } else if (integerIsInvalid) {
+      console.log('The loan duration must be at least one year.');
+    }
+  }
+  console.log(years);
+  return years;
+};
+
+// calculate months in x years
+let calculateMonths = (years) => {
+  return years * 12;
+};
+
+// calculate monthly interest rate
+let getMonthlyInterestRate = (number) => {
+  return number / 12;
+};
 
 let answer;
 
 do {
-
-  // =========================================================================
-  // LOAN AMOUNT
-  let loanAmount = readline.question('How much do you want to borrow?: ');
-  if (loanAmount[0] === '$') {
-    loanAmount = loanAmount.substring(1);
-  }
-  // removeDollarSign(loanAmount);
-
-  convertStrToNum(loanAmount);
-  console.log(`${loanAmount}`);
-
-  while (isInvalidNumber(loanAmount)) {
-    console.log('Must be a valid positive number and use numbers only');
-
-    loanAmount = readline.question('How much do you want to borrow?: ');
-    // removeDollarSign(loanAmount);
-    if (loanAmount[0] === '$') {
-      loanAmount = loanAmount.substring(1);
-    }
-    convertStrToNum(loanAmount);
-    console.log(`$${loanAmount}`);
-  }
-
-
-  // =======================================================================
-  // APR
-  let APR = readline.question('What is the Annual Percentage Rate?: ');
-  // if the user types $ sign in front of the amount remove it from the string
-  if (APR[APR.length - 1] === '%') {
-    APR = APR.slice(0, -1);
-  }
-  
-  convertStrToNum(APR);
-  console.log(`${APR}%`);
+  let loanAmount = getLoanAmount();
+  let APR = getAPR();
   let APRInFranctional = APR / 100;
-  // console.log(APRInFranctional);
+  let years = getLoanDuration();
 
-  while (isInvalidInterestRate(APR)) {
-    console.log('Must be a valid positive number');
-    APR = readline.question('What is the Annual Percentage Rate?: ');
-
-    if (APR[APR.length - 1] === '%') {
-      APR = APR.slice(0, -1);
-    }
-
-    convertStrToNum(APR);
-    APRInFranctional = APR / 100;
-    // console.log(APRInFranctional);
-    console.log(`${APR}%`);
-  }
-
-
-  // =====================================================================
-  // YEARS
-  let years = Number(readline.question('What is the loan duration in years?: '));
-  console.log(years);
-
-  while (isInvalidNumber(years)) {
-    console.log('Must be a valid positive number');
-    years = Number(readline.question('What is the loan duration in years?: '));
-  }
-
-  while (isNotValidInteger(years)) {
-    console.log('The loan duration must be at least one year.');
-    years = Number(readline.question('What is the loan duration in years?: '));
-    console.log(years)
-  }
-
-  // ====================================================================
   // MONTHLY PAYMENT CALCULATION
-  let months = years * 12;
-  let monthlyInterestRate = APRInFranctional / 12;
+  let months = calculateMonths(years);
+  let monthlyInterestRate = getMonthlyInterestRate(APRInFranctional);
   let monthlyPayment = loanAmount * (monthlyInterestRate / (1 - Math.pow((1 + monthlyInterestRate), (-months))));
   if (APR === 0) {
     monthlyPayment = loanAmount / months;
@@ -111,11 +121,14 @@ do {
 
   console.log(`Your monthly payment will be: $${Number(monthlyPayment.toFixed(2))}`);
 
-  // ==================================================================
   // DO YOU WANT TO KEEP GOING?
-  answer = readline.question("Would you like to do another calculation? \nType 'y' for yes, 'n' for no: ");
+  answer = '';
+  while (answer !== 'n' && answer !== 'y') {
+    answer = readline.question("Would you like to do another calculation? \nType 'y' for yes, 'n' for no: ");
+  }
 
   if (answer === 'n') {
-    break; 
+    break;
   }
+
 } while (answer === 'y');
