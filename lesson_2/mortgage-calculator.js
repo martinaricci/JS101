@@ -50,7 +50,7 @@ let getLoanAmount = () => {
       console.log('Must be a valid positive number and use numbers only');
     }
   }
-  console.log(loanAmount);
+  console.log(`Loan amount: ${loanAmount}`);
   return loanAmount;
 };
 
@@ -68,7 +68,7 @@ let getAPR = () => {
       console.log('Must be a valid positive number');
     }
   }
-  console.log(`${APR}%`);
+  console.log(`Interest rate: ${APR}%`);
   return APR;
 };
 
@@ -81,7 +81,7 @@ let getLoanDuration = () => {
   while (numberIsInvalid || integerIsInvalid) {
     years = readline.question('What is the loan duration in years?: ');
     years = convertStrToNum(years);
-    numberIsInvalid = isInvalidNumber (years);
+    numberIsInvalid = isInvalidNumber(years);
     integerIsInvalid = isNotValidInteger(years);
     if (numberIsInvalid) {
       console.log('Must be a valid positive number');
@@ -89,7 +89,7 @@ let getLoanDuration = () => {
       console.log('The loan duration must be at least one year.');
     }
   }
-  console.log(years);
+  console.log(`Loan duration: ${years}`);
   return years;
 };
 
@@ -106,6 +106,7 @@ let getMonthlyInterestRate = (number) => {
 let answer;
 
 do {
+  console.log('Welcome to the mortgage calculator!')
   let loanAmount = getLoanAmount();
   let APR = getAPR();
   let APRInFranctional = APR / 100;
