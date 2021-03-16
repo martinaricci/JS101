@@ -58,7 +58,9 @@ let anotherGame = () => {
 };
 
 do {
-  prompt(`Choose one: '${VALID_CHOICES[0]}' for ${CHOICES[0]}, '${VALID_CHOICES[1]}' for ${CHOICES[1]}, '${VALID_CHOICES[2]}' for ${CHOICES[2]}, '${VALID_CHOICES[3]}' for ${CHOICES[3]}, '${VALID_CHOICES[4]}' for ${CHOICES[4]}`);
+  console.log(`Your wins: ${yourWins}`);
+  console.log(`Computer wins: ${computerWins}`);
+  prompt(`Choose one to play: '${VALID_CHOICES[0]}' for ${CHOICES[0]}, '${VALID_CHOICES[1]}' for ${CHOICES[1]}, '${VALID_CHOICES[2]}' for ${CHOICES[2]}, '${VALID_CHOICES[3]}' for ${CHOICES[3]}, '${VALID_CHOICES[4]}' for ${CHOICES[4]}`);
   let choice = readline.question();
 
   while (!VALID_CHOICES.includes(choice)) {
@@ -69,7 +71,6 @@ do {
   if (VALID_CHOICES.includes(choice)) {
     let index = VALID_CHOICES.indexOf(choice);
     choice = CHOICES[index];
-    console.log(choice);
   }
 
   let randomIndex = Math.floor(Math.random() * CHOICES.length);
