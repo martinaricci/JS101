@@ -2,12 +2,6 @@ const readline = require('readline-sync');
 
 let isInvalidNumber = (number) => {
   return number.toString().trim() === '' ||
-         Number(number) < 0   ||
-         Number.isNaN(Number(number));
-};
-
-let isInvalidInterestRate = (number) => {
-  return number.toString().trim() === '' ||
          Number(number) <= 0   ||
          Number.isNaN(Number(number));
 };
@@ -25,8 +19,7 @@ let removeDollarSign = (sign) => {
 };
 
 let convertStrToNum = (str) => {
-  str = Number(str);
-  return str;
+  return Number(str);
 };
 
 let removePercentageSign = (sign) => {
@@ -46,7 +39,7 @@ let getLoanAmount = () => {
     loanAmount = removeDollarSign(loanAmount);
     loanAmount = convertStrToNum(loanAmount);
     numberIsInvalid = isInvalidNumber(loanAmount);
-    if (numberIsInvalid === true) {
+    if (numberIsInvalid) {
       console.log('Must be a valid positive number and use numbers only');
     }
   }
@@ -63,7 +56,7 @@ let getAPR = () => {
     APR = readline.question('What is the Annual Percentage Rate?: ');
     APR = removePercentageSign(APR);
     APR = convertStrToNum(APR);
-    numberIsInvalid = isInvalidInterestRate(APR);
+    numberIsInvalid = isInvalidNumber(APR);
     if (numberIsInvalid) {
       console.log('Must be a valid positive number');
     }
@@ -103,10 +96,21 @@ let getMonthlyInterestRate = (number) => {
   return number / 12;
 };
 
-let answer;
+// ask for another calculation
+let anotherCalculation = () => {
+  while (answer !== 'n' && answer !== 'y') {
+    answer = readline.question("Would you like to do another calculation? \nType 'y' for yes, 'n' for no: ");
+    if (answer !== 'n' && answer !== 'y') {
+      console.log('Please give a valid answer.');
+    }
+  };
+  
+  return answer === 'y' ? true : false;
+}
 
+let answer = 'y';
 do {
-  console.log('Welcome to the mortgage calculator!')
+  console.log('Welcome to the mortgage calculator!');
   let loanAmount = getLoanAmount();
   let APR = getAPR();
   let APRInFranctional = APR / 100;
@@ -124,15 +128,6 @@ do {
 
   // DO YOU WANT TO KEEP GOING?
   answer = '';
-  do {
-    answer = readline.question("Would you like to do another calculation? \nType 'y' for yes, 'n' for no: ");
-    if (answer !== 'n' && answer !== 'y') {
-      console.log('Please give a valid answer.');
-    }
-  } while (answer !== 'n' && answer !== 'y');
+  anotherCalculation();
 
-  if (answer === 'n') {
-    break;
-  }
-
-} while (answer === 'y');
+} while (anotherCalculation());
