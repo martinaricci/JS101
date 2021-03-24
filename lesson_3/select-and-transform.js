@@ -59,3 +59,21 @@ function doubleOddNumbers(numbers) {
 
 // console.log(myNumbersArray);
 console.log(doubleOddNumbers(myNumbersArray));
+
+
+// Update the doubleNumbers function so that it not only can double the numbers in an array but can also multiply them by any other number. 
+
+let numbers = [1, 4, 3, 7, 2, 6];
+
+function multiply(numbers, multiplier) {
+    let counter = 0;
+    
+    while (counter < numbers.length) {
+        numbers[counter] = numbers[counter] * multiplier;
+        counter++;
+    }
+    
+    return numbers;
+}
+
+console.log(multiply(numbers, 3)); // => [3, 12, 9, 21, 6, 18]
