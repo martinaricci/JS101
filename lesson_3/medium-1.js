@@ -24,3 +24,13 @@ let swapCase = (str) => {
 }
 
 console.log(swapCase(munstersDescription));
+
+
+let number = 5;
+
+do {
+  number = Math.floor(10 * Math.random());
+  console.log(number);
+} while (number !== 5);
+
+console.log('Exiting...');
