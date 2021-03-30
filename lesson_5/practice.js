@@ -24,21 +24,21 @@ books.sort((a, b) => {
 
 // For each of these collection objects, demonstrate how you would access the letter g.
 
-let arr1 = ['a', 'b', ['c', ['d', 'e', 'f', 'g']]];
+// let arr1 = ['a', 'b', ['c', ['d', 'e', 'f', 'g']]];
 
-let arr2 = [{ first: ['a', 'b', 'c'], second: ['d', 'e', 'f'] }, { third: ['g', 'h', 'i'] }];
+// let arr2 = [{ first: ['a', 'b', 'c'], second: ['d', 'e', 'f'] }, { third: ['g', 'h', 'i'] }];
 
-let arr3 = [['abc'], ['def'], { third: ['ghi'] }];
+// let arr3 = [['abc'], ['def'], { third: ['ghi'] }];
 
-let obj1 = { a: ['d', 'e'], b: ['f', 'g'], c: ['h', 'i'] };
+// let obj1 = { a: ['d', 'e'], b: ['f', 'g'], c: ['h', 'i'] };
 
-let obj2 = { first: { d: 3 }, second: { e: 2, f: 1 }, third: { g: 0 }}
+// let obj2 = { first: { d: 3 }, second: { e: 2, f: 1 }, third: { g: 0 }}
 
-console.log(arr1[2][1][3]);
-console.log(arr2[1]['third'][0]);
-console.log(arr3[2]['third'][0][0]);
-console.log(obj1['b'][1]);
-console.log(Object.keys(obj2['third'])[0]);
+// console.log(arr1[2][1][3]);
+// console.log(arr2[1]['third'][0]);
+// console.log(arr3[2]['third'][0][0]);
+// console.log(obj1['b'][1]);
+// console.log(Object.keys(obj2['third'])[0]);
 
 
 // For each of these collection objects, demonstrate how you would change the value 3 to 4.
@@ -88,3 +88,30 @@ console.log(totalMaleAge);
 for (let munster in munsters) {
     console.log(`${munster} is a ${munsters[munster]['age']}-year-old ${munsters[munster]['gender']}`)
 }
+
+
+// Using the forEach method, write some code to output all vowels from the strings in the arrays. Don't use a for or while loop.
+
+let obj = {
+  first: ['the', 'quick'],
+  second: ['brown', 'fox'],
+  third: ['jumped'],
+  fourth: ['over', 'the', 'lazy', 'dog'],
+};
+
+console.log(Object.values(obj));
+let objValues = Object.values(obj);
+
+let vowels = [];
+
+objValues.forEach(arr => {
+    return arr.forEach(str => {
+        return str.split('').forEach(letter => {
+            if ('aeiou'.includes(letter)) {
+                vowels.push(letter);
+            }
+        });
+    });
+});
+console.log(vowels);
+return vowels;
