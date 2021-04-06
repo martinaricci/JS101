@@ -7,6 +7,7 @@ let prompt = message => {
 const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = '0';
+const WINNING_SCORE = 5;
 
 let displayBoard = (board) => {
     console.clear();
@@ -54,7 +55,7 @@ let joinOr = (arr, delimiter, joinWord) => {
         return arr.slice(0, -1).join(delimiter) + ' ' + joinWord + ' ' + arr.slice(-1);
     }
 }
-
+// --------------
 
 let playerChoosesSquare = board => {
     let square;
@@ -79,6 +80,13 @@ let computerChoosesSquare = board => {
 
 let boardFull = board => {
     return emptySquares(board).length === 0;
+}
+
+let initializeScore = () => {
+    return score = {
+        player: 0,
+        computer: 0
+    }
 }
 
 let detectWinner = board => {
@@ -111,12 +119,31 @@ let detectWinner = board => {
         }
     }
 
-    return false;
+    return null;
 }
 
 let someoneWon = board => {
-    return detectWinner(board);
+    return !!detectWinner(board);
 }
+
+let resetScores = (score) => {
+    score['player'] = 0;
+    score['computer'] = 0;
+}
+
+let displayGrandWinner = (score) => {
+    if (score['player'] === WINNING_SCORE) {
+        prompt('PLAYER IS THE GRAND WINNER');
+    } else if (score['computer'] === WINNING_SCORE) {
+        prompt('COMPUTER IS THE GRAND WINNER');
+    }
+}
+
+let isGrandWinner = (score) => {
+    return (score['player'] === WINNING_SCORE) || (score['computer'] === WINNING_SCORE);
+} 
+
+initializeScore();
     
 while (true) {
     let board = initializeBoard();
@@ -130,11 +157,25 @@ while (true) {
     }
     
     displayBoard(board);
-    
+
     if (someoneWon(board)) {
-        prompt(`${detectWinner(board)} won`)
+        prompt(`${detectWinner(board)} won`);
+        if (detectWinner(board) === 'Player') {
+            score['player'] += 1;
+        } else {
+            score['computer'] += 1;
+        }
     } else {
         prompt('It\'s a tie');
+    }
+
+    displayGrandWinner(score);
+
+    prompt(`Player points: ${score['player']}`);
+    prompt(`Computer points: ${score['computer']}`);
+
+    if (isGrandWinner(score)) {
+        resetScores(score);
     }
 
     prompt('Play again? (y or n)');
