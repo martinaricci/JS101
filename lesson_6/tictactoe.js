@@ -119,11 +119,11 @@ let detectWinner = board => {
         }
     }
 
-    return null;
+    return false;
 }
 
 let someoneWon = board => {
-    return !!detectWinner(board);
+    return detectWinner(board);
 }
 
 let resetScores = (score) => {
@@ -131,7 +131,7 @@ let resetScores = (score) => {
     score['computer'] = 0;
 }
 
-let displayGrandWinner = (score) => {
+let isGrandWinner = (score) => {
     if (score['player'] === WINNING_SCORE) {
         prompt('PLAYER IS THE GRAND WINNER');
     } else if (score['computer'] === WINNING_SCORE) {
@@ -139,48 +139,49 @@ let displayGrandWinner = (score) => {
     }
 }
 
-let isGrandWinner = (score) => {
-    return (score['player'] === WINNING_SCORE) || (score['computer'] === WINNING_SCORE);
-} 
+// ----------------------
+let anotherGame = 'y';
 
-initializeScore();
-    
-while (true) {
-    let board = initializeBoard();
+while (anotherGame === 'y') {
+    initializeScore(); // return score
 
-    while (true) {
-        displayBoard(board);
-        playerChoosesSquare(board);
-        if (someoneWon(board) || boardFull(board)) break;
-        computerChoosesSquare(board);
-        if (someoneWon(board) || boardFull(board)) break;
-    }
-    
-    displayBoard(board);
-
-    if (someoneWon(board)) {
-        prompt(`${detectWinner(board)} won`);
-        if (detectWinner(board) === 'Player') {
-            score['player'] += 1;
-        } else {
-            score['computer'] += 1;
+    while ((score['player'] < 5) && (score['computer'] < 5)) {
+        let board = initializeBoard();
+        
+        while (true) {
+            displayBoard(board);
+            playerChoosesSquare(board);
+            if (someoneWon(board) || boardFull(board)) break;
+            computerChoosesSquare(board);
+            if (someoneWon(board) || boardFull(board)) break;
         }
-    } else {
-        prompt('It\'s a tie');
+        
+        displayBoard(board);
+    
+        if (someoneWon(board)) {
+            if (detectWinner(board) === 'Player') {
+                score['player'] += 1;
+            } else {
+                score['computer'] += 1;
+            }
+            prompt(`Player: ${score['player']} - Computer: ${score['computer']}`);
+        } else {
+            prompt('It\'s a tie');
+        }
+    
+        isGrandWinner(score);
+    
+        if ((score['player'] < 5) && (score['computer'] < 5)) {
+            prompt('Play again? (y or n)');
+            anotherGame = readline.question().toLowerCase()[0];
+        }
+        if (anotherGame !== 'y') break;
     }
-
-    displayGrandWinner(score);
-
-    prompt(`Player points: ${score['player']}`);
-    prompt(`Computer points: ${score['computer']}`);
-
-    if (isGrandWinner(score)) {
-        resetScores(score);
-    }
-
+    if (anotherGame !== 'y') break;
+    resetScores(score);
     prompt('Play again? (y or n)');
-    let answer = readline.question().toLowerCase()[0];
-    if (answer !== 'y') break;
+    anotherGame = readline.question().toLowerCase()[0];
+    if (anotherGame !== 'y') break;
 }
 
 prompt('Thanks for playing Tic Tac Toe!');
