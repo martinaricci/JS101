@@ -8,7 +8,6 @@ const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = '0';
 
-// THE BOARD
 let displayBoard = (board) => {
     console.clear();
     console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}`);
@@ -43,6 +42,7 @@ let emptySquares = board => {
     return Object.keys(board).filter(key => board[key] === INITIAL_MARKER);
 }
 
+// BONUS
 let joinOr = (arr, delimiter, joinWord) => {
     if (arr.length === 0) {
         return '';
