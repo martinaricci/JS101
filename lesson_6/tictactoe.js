@@ -43,16 +43,24 @@ let emptySquares = board => {
     return Object.keys(board).filter(key => board[key] === INITIAL_MARKER);
 }
 
-let board = initializeBoard();
-console.log(board);
-console.log(displayBoard(board));
+let joinOr = (arr, delimiter, joinWord) => {
+    if (arr.length === 0) {
+        return '';
+    } else if (arr.length === 1) {
+        return arr.join();
+    } else if (arr.length === 2) {
+        return arr.join(` ${joinWord} `);
+    } else {
+        return arr.slice(0, -1).join(delimiter) + ' ' + joinWord + ' ' + arr.slice(-1);
+    }
+}
 
 
 let playerChoosesSquare = board => {
     let square;
 
     while (true) {
-        prompt(`Choose a square ${emptySquares(board).join(', ')}:`);
+        prompt(`Choose a square ${joinOr(emptySquares(board), ', ', 'or')}:`);
         square = readline.question().trim();
 
         if (emptySquares(board).includes(square)) break;
