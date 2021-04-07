@@ -8,7 +8,7 @@ const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = '0';
 const WINNING_SCORE = 5;
-let winningLines = [
+const WINNING_LINES = [
   [1, 2, 3],
   [4, 5, 6],
   [7, 8, 9],
@@ -79,11 +79,30 @@ let playerChoosesSquare = board => {
   board[square] = HUMAN_MARKER;
 };
 
-let computerChoosesSquare = board => {
-  let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
+let findSquareAtRisk = board => {
+  let squareAtRisk;
+  for (let index = 0; index < WINNING_LINES.length; index++) {
+    let line = WINNING_LINES[index];
+    let arrOfMarkers = line.map(square => board[square]);
+    console.log(line);
+    if (arrOfMarkers.filter(square => square === 'X').length === 2) {
+      squareAtRisk = line.find(square => board[square] === ' ');
+      return squareAtRisk;
+    }
+  }
 
-  let square = emptySquares(board)[randomIndex];
-  board[square] = COMPUTER_MARKER;
+  return null;
+};
+
+let computerChoosesSquare = board => {
+  let square = findSquareAtRisk(board);
+
+  if (!square) {
+    let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
+
+    square = emptySquares(board)[randomIndex];
+  }
+    board[square] = COMPUTER_MARKER;
 };
 
 let boardFull = board => {
@@ -100,8 +119,8 @@ let initializeScore = () => {
 };
 
 let detectWinner = board => {
-  for (let line = 0; line < winningLines.length; line++) {
-    let [sq1, sq2, sq3] = winningLines[line];
+  for (let line = 0; line < WINNING_LINES.length; line++) {
+    let [sq1, sq2, sq3] = WINNING_LINES[line];
 
     if (
       board[sq1] === HUMAN_MARKER &&
@@ -148,6 +167,7 @@ while (anotherGame === 'y') {
 
     while (true) {
       displayBoard(board);
+      console.log(board)
       playerChoosesSquare(board);
       if (someoneWon(board) || boardFull(board)) break;
       computerChoosesSquare(board);
@@ -167,7 +187,7 @@ while (anotherGame === 'y') {
       prompt('It\'s a tie');
     }
 
-    console.log('----- CURRENT SCORES -----');
+    console.log('----- SCORE -----');
     prompt(`You: ${score['player']}`);
     prompt(`Computer: ${score['computer']}`);
     isGrandWinner(score);
