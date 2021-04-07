@@ -8,14 +8,21 @@ const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = '0';
 const WINNING_SCORE = 5;
+let winningLines = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+  [1, 4, 7],
+  [2, 5, 8],
+  [3, 6, 9],
+  [1, 5, 9],
+  [3, 5, 7]
+];
 
 let displayBoard = (board) => {
   console.clear();
   console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}`);
-  console.log('----- CURRENT SCORES -----')
-  prompt(`You: ${score['player']}`);
-  prompt(`Computer: ${score['computer']}`);
-  
+
   console.log('');
   console.log('     |     |');
   console.log(`  ${board['1']}  |  ${board['2']}  |  ${board['3']}`);
@@ -84,7 +91,7 @@ let boardFull = board => {
 };
 
 let initializeScore = () => {
-  score = {
+  let score = {
     player: 0,
     computer: 0
   };
@@ -93,17 +100,6 @@ let initializeScore = () => {
 };
 
 let detectWinner = board => {
-  let winningLines = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
-    [1, 4, 7],
-    [2, 5, 8],
-    [3, 6, 9],
-    [1, 5, 9],
-    [3, 5, 7]
-  ];
-
   for (let line = 0; line < winningLines.length; line++) {
     let [sq1, sq2, sq3] = winningLines[line];
 
@@ -158,7 +154,6 @@ while (anotherGame === 'y') {
       if (someoneWon(board) || boardFull(board)) break;
     }
 
-    
     if (someoneWon(board)) {
       if (detectWinner(board) === 'You') {
         score['player'] += 1;
@@ -172,6 +167,9 @@ while (anotherGame === 'y') {
       prompt('It\'s a tie');
     }
 
+    console.log('----- CURRENT SCORES -----');
+    prompt(`You: ${score['player']}`);
+    prompt(`Computer: ${score['computer']}`);
     isGrandWinner(score);
 
     if ((score['player'] < 5) && (score['computer'] < 5)) {
