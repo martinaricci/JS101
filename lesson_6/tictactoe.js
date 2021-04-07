@@ -20,7 +20,7 @@ const WINNING_LINES = [
 ];
 
 let displayBoard = (board) => {
-  // console.clear();
+  console.clear();
   console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}`);
 
   console.log('');
@@ -97,7 +97,6 @@ let findSquareAtRisk = board => {
 
 let computerChoosesSquare = board => {
   let square = findSquareAtRisk(board);
-  console.log(square)
 
   if (square === null) {
     let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
@@ -169,7 +168,7 @@ while (anotherGame === 'y') {
 
     while (true) {
       displayBoard(board);
-      console.log(board);
+      // console.log(board);
       playerChoosesSquare(board);
       if (someoneWon(board) || boardFull(board)) break;
       computerChoosesSquare(board);
