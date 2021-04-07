@@ -20,7 +20,7 @@ const WINNING_LINES = [
 ];
 
 let displayBoard = (board) => {
-  console.clear();
+  // console.clear();
   console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}`);
 
   console.log('');
@@ -83,11 +83,12 @@ let findSquareAtRisk = board => {
   let squareAtRisk;
   for (let index = 0; index < WINNING_LINES.length; index++) {
     let line = WINNING_LINES[index];
-    let arrOfMarkers = line.map(square => board[square]);
     console.log(line);
-    if (arrOfMarkers.filter(square => square === 'X').length === 2) {
+    if (line.filter(square => board[square] === 'X').length === 2) {
       squareAtRisk = line.find(square => board[square] === ' ');
-      return squareAtRisk;
+      if (squareAtRisk !== undefined) {
+        return squareAtRisk;
+      }
     }
   }
 
@@ -96,13 +97,14 @@ let findSquareAtRisk = board => {
 
 let computerChoosesSquare = board => {
   let square = findSquareAtRisk(board);
+  console.log(square)
 
-  if (!square) {
+  if (square === null) {
     let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
 
     square = emptySquares(board)[randomIndex];
   }
-    board[square] = COMPUTER_MARKER;
+  board[square] = COMPUTER_MARKER;
 };
 
 let boardFull = board => {
@@ -167,7 +169,7 @@ while (anotherGame === 'y') {
 
     while (true) {
       displayBoard(board);
-      console.log(board)
+      console.log(board);
       playerChoosesSquare(board);
       if (someoneWon(board) || boardFull(board)) break;
       computerChoosesSquare(board);
