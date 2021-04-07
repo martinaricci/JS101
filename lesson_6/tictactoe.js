@@ -8,7 +8,6 @@ const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = '0';
 const WINNING_SCORE = 5;
-let score;
 
 let displayBoard = (board) => {
   console.clear();
@@ -146,7 +145,7 @@ let isGrandWinner = (score) => {
 let anotherGame = 'y';
 
 while (anotherGame === 'y') {
-  score = initializeScore();
+  let score = initializeScore();
 
   while ((score['player'] < 5) && (score['computer'] < 5) && anotherGame === 'y') {
     let board = initializeBoard();
