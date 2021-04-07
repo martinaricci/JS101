@@ -13,7 +13,10 @@ let score;
 let displayBoard = (board) => {
   console.clear();
   console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}`);
-
+  console.log('----- CURRENT SCORES -----')
+  prompt(`You: ${score['player']}`);
+  prompt(`Computer: ${score['computer']}`);
+  
   console.log('');
   console.log('     |     |');
   console.log(`  ${board['1']}  |  ${board['2']}  |  ${board['3']}`);
@@ -55,8 +58,6 @@ let joinOr = (arr, delimiter, joinWord) => {
     return arr.slice(0, -1).join(delimiter) + ' ' + joinWord + ' ' + arr.slice(-1);
   }
 };
-
-// --------------
 
 let playerChoosesSquare = board => {
   let square;
@@ -112,7 +113,7 @@ let detectWinner = board => {
       board[sq2] === HUMAN_MARKER &&
       board[sq3] === HUMAN_MARKER
     ) {
-      return 'Player';
+      return 'You';
     } else if (
       board[sq1] === COMPUTER_MARKER &&
       board[sq2] === COMPUTER_MARKER &&
@@ -135,7 +136,7 @@ let resetScores = (score) => {
 
 let isGrandWinner = (score) => {
   if (score['player'] === WINNING_SCORE) {
-    prompt('PLAYER IS THE GRAND WINNER');
+    prompt('YOU ARE THE GRAND WINNER');
   } else if (score['computer'] === WINNING_SCORE) {
     prompt('COMPUTER IS THE GRAND WINNER');
   }
@@ -145,7 +146,7 @@ let isGrandWinner = (score) => {
 let anotherGame = 'y';
 
 while (anotherGame === 'y') {
-  score = initializeScore(); // return score
+  score = initializeScore();
 
   while ((score['player'] < 5) && (score['computer'] < 5) && anotherGame === 'y') {
     let board = initializeBoard();
@@ -158,16 +159,17 @@ while (anotherGame === 'y') {
       if (someoneWon(board) || boardFull(board)) break;
     }
 
-    displayBoard(board);
-
+    
     if (someoneWon(board)) {
-      if (detectWinner(board) === 'Player') {
+      if (detectWinner(board) === 'You') {
         score['player'] += 1;
       } else {
         score['computer'] += 1;
       }
-      prompt(`Player: ${score['player']} - Computer: ${score['computer']}`);
+      displayBoard(board);
+      prompt(`${detectWinner(board)} won this match.`);
     } else {
+      displayBoard(board);
       prompt('It\'s a tie');
     }
 
