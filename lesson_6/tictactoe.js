@@ -94,12 +94,26 @@ let findSquareAtRisk = (board, marker) => {
   return null;
 };
 
+let findSquareFive = board => {
+  let squareFive;
+  for (let index = 0; index < WINNING_LINES.length; index++) {
+    let line = WINNING_LINES[index];
+    squareFive = line.find(square => square === 5);
+    if (board[squareFive] === INITIAL_MARKER) {
+
+      return squareFive;
+    }
+  }
+
+  return null;
+};
+
 let computerChoosesSquare = board => {
   let square;
   let squareAtRiskForHuman = findSquareAtRisk(board, HUMAN_MARKER);
   let squareToAttackHuman = findSquareAtRisk(board, COMPUTER_MARKER);
-  square = squareToAttackHuman || squareAtRiskForHuman;
-  // console.log(square);
+  let emptySquareFive = findSquareFive(board);
+  square = squareToAttackHuman || squareAtRiskForHuman || emptySquareFive;
 
   if (square === null) {
     let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
