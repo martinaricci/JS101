@@ -96,13 +96,17 @@ let findSquareAtRisk = (board, marker) => {
 };
 
 let computerChoosesSquare = board => {
-  let square = findSquareAtRisk(board, HUMAN_MARKER || COMPUTER_MARKER);
+  let square;
+  let squareAtRiskForHuman = findSquareAtRisk(board, HUMAN_MARKER);
+  let squareToAttack = findSquareAtRisk(board, COMPUTER_MARKER);
+  square = squareAtRiskForHuman || squareToAttack;
 
   if (square === null) {
     let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
 
     square = emptySquares(board)[randomIndex];
   }
+
   board[square] = COMPUTER_MARKER;
 };
 
