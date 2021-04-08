@@ -79,15 +79,15 @@ let playerChoosesSquare = board => {
   board[square] = HUMAN_MARKER;
 };
 
-let findSquareAtRisk = board => {
-  let squareAtRisk;
+let findSquareAtRisk = (board, marker) => {
+  let unoccupiedSquare;
   for (let index = 0; index < WINNING_LINES.length; index++) {
     let line = WINNING_LINES[index];
     console.log(line);
-    if (line.filter(square => board[square] === 'X').length === 2) {
-      squareAtRisk = line.find(square => board[square] === ' ');
-      if (squareAtRisk !== undefined) {
-        return squareAtRisk;
+    if (line.filter(square => board[square] === marker).length === 2) {
+      unoccupiedSquare = line.find(square => board[square] === ' ');
+      if (unoccupiedSquare !== undefined) {
+        return unoccupiedSquare;
       }
     }
   }
@@ -96,7 +96,7 @@ let findSquareAtRisk = board => {
 };
 
 let computerChoosesSquare = board => {
-  let square = findSquareAtRisk(board);
+  let square = findSquareAtRisk(board, HUMAN_MARKER || COMPUTER_MARKER);
 
   if (square === null) {
     let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
