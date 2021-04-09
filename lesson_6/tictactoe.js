@@ -21,7 +21,7 @@ const WINNING_LINES = [
 ];
 
 let displayBoard = (board) => {
-  // console.clear();
+  console.clear();
   console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}`);
 
   console.log('');
@@ -183,37 +183,40 @@ let isGrandWinner = (score) => {
 };
 
 // ----------------------
-let turn = greetAndChoosePlayer();
-
-while (turn !== TURN[0] && turn !== TURN[1]) {
-  console.log(`Please choose between ${TURN[0]} and ${TURN[1]}`);
-  turn = readline.question();
-}
-
-console.log(turn);
 let anotherGame = 'y';
 
 while (anotherGame === 'y') {
+  console.clear();
+  let turn = TURN[2];
+  turn = greetAndChoosePlayer();
+
+  while (turn !== TURN[0] && turn !== TURN[1]) {
+    console.log(`Please choose between ${TURN[0]} and ${TURN[1]}`);
+    turn = readline.question();
+  }
+
+  // console.log(turn);
   let score = initializeScore();
 
   while ((score['player'] < 5) && (score['computer'] < 5) && anotherGame === 'y') {
     let board = initializeBoard();
 
-    while (true) {
+    while (turn === 'computer') {
+      computerChoosesSquare(board);
       displayBoard(board);
-      console.log(board);
-      if (turn === 'computer') {
-        computerChoosesSquare(board);
-        displayBoard(board);
-        if (someoneWon(board) || boardFull(board)) break;
-        playerChoosesSquare(board);
-        if (someoneWon(board) || boardFull(board)) break;
-      } else {
-        playerChoosesSquare(board);
-        if (someoneWon(board) || boardFull(board)) break;
-        computerChoosesSquare(board);
-        if (someoneWon(board) || boardFull(board)) break;
-      }
+      if (someoneWon(board) || boardFull(board)) break;
+      playerChoosesSquare(board);
+      if (someoneWon(board) || boardFull(board)) break;
+      turn = 'computer';
+    }
+
+    while (turn === 'player') {
+      displayBoard(board);
+      playerChoosesSquare(board);
+      if (someoneWon(board) || boardFull(board)) break;
+      computerChoosesSquare(board);
+      if (someoneWon(board) || boardFull(board)) break;
+      turn = 'player';
     }
 
     if (someoneWon(board)) {
