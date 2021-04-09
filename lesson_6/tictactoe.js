@@ -8,6 +8,7 @@ const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = '0';
 const WINNING_SCORE = 5;
+const TURN = ['player', 'computer', 'choose'];
 const WINNING_LINES = [
   [1, 2, 3],
   [4, 5, 6],
@@ -20,7 +21,7 @@ const WINNING_LINES = [
 ];
 
 let displayBoard = (board) => {
-  console.clear();
+  // console.clear();
   console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}`);
 
   console.log('');
@@ -38,6 +39,12 @@ let displayBoard = (board) => {
   console.log('');
 };
 
+let greetAndChoosePlayer = () => {
+  console.log('** Welcome to Tic Tac Toe! :) **');
+  console.log('Wins who first scores 5 points. Good luck!');
+  console.log(`Who should start first: ${TURN[0]} or ${TURN[1]}?`);
+  return readline.question();
+};
 
 let initializeBoard = () => {
   let board = {};
@@ -100,7 +107,6 @@ let findSquareFive = board => {
     let line = WINNING_LINES[index];
     squareFive = line.find(square => square === 5);
     if (board[squareFive] === INITIAL_MARKER) {
-
       return squareFive;
     }
   }
@@ -114,6 +120,7 @@ let computerChoosesSquare = board => {
   let squareToAttackHuman = findSquareAtRisk(board, COMPUTER_MARKER);
   let emptySquareFive = findSquareFive(board);
   square = squareToAttackHuman || squareAtRiskForHuman || emptySquareFive;
+  // console.log(square)
 
   if (square === null) {
     let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
@@ -176,6 +183,14 @@ let isGrandWinner = (score) => {
 };
 
 // ----------------------
+let turn = greetAndChoosePlayer();
+
+while (turn !== TURN[0] && turn !== TURN[1]) {
+  console.log(`Please choose between ${TURN[0]} and ${TURN[1]}`);
+  turn = readline.question();
+}
+
+console.log(turn);
 let anotherGame = 'y';
 
 while (anotherGame === 'y') {
@@ -186,11 +201,19 @@ while (anotherGame === 'y') {
 
     while (true) {
       displayBoard(board);
-      // console.log(board);
-      playerChoosesSquare(board);
-      if (someoneWon(board) || boardFull(board)) break;
-      computerChoosesSquare(board);
-      if (someoneWon(board) || boardFull(board)) break;
+      console.log(board);
+      if (turn === 'computer') {
+        computerChoosesSquare(board);
+        displayBoard(board);
+        if (someoneWon(board) || boardFull(board)) break;
+        playerChoosesSquare(board);
+        if (someoneWon(board) || boardFull(board)) break;
+      } else {
+        playerChoosesSquare(board);
+        if (someoneWon(board) || boardFull(board)) break;
+        computerChoosesSquare(board);
+        if (someoneWon(board) || boardFull(board)) break;
+      }
     }
 
     if (someoneWon(board)) {
@@ -222,4 +245,5 @@ while (anotherGame === 'y') {
   anotherGame = readline.question().toLowerCase()[0];
 }
 
+console.clear();
 prompt('Thanks for playing Tic Tac Toe!');
