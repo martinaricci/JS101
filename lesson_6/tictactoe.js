@@ -8,7 +8,7 @@ const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = '0';
 const WINNING_SCORE = 5;
-const TURN = ['player', 'computer', 'choose'];
+const PLAYERS = ['player', 'computer'];
 const WINNING_LINES = [
   [1, 2, 3],
   [4, 5, 6],
@@ -42,7 +42,7 @@ let displayBoard = (board) => {
 let greetAndChoosePlayer = () => {
   console.log('** Welcome to Tic Tac Toe! :) **');
   console.log('Wins who first scores 5 points. Good luck!');
-  console.log(`Who should start first: ${TURN[0]} or ${TURN[1]}?`);
+  console.log(`Who should start first: ${PLAYERS[0]} or ${PLAYERS[1]}?`);
   return readline.question();
 };
 
@@ -187,18 +187,18 @@ let anotherGame = 'y';
 
 while (anotherGame === 'y') {
   console.clear();
-  let turn = TURN[2];
+  let turn;
   turn = greetAndChoosePlayer();
 
-  while (turn !== TURN[0] && turn !== TURN[1]) {
-    console.log(`Please choose between ${TURN[0]} and ${TURN[1]}`);
+  while (turn !== PLAYERS[0] && turn !== PLAYERS[1]) {
+    console.log(`Please choose between ${PLAYERS[0]} and ${PLAYERS[1]}`);
     turn = readline.question();
   }
 
   // console.log(turn);
   let score = initializeScore();
 
-  while ((score['player'] < 5) && (score['computer'] < 5) && anotherGame === 'y') {
+  while ((score['player'] < 5) && (score['computer'] < 5)) {
     let board = initializeBoard();
 
     while (turn === 'computer') {
@@ -238,13 +238,13 @@ while (anotherGame === 'y') {
     isGrandWinner(score);
 
     if ((score['player'] < 5) && (score['computer'] < 5)) {
-      prompt('Play again? (y or n)');
-      anotherGame = readline.question().toLowerCase()[0];
+      prompt("Press 'Enter' to play again");
+      readline.question();
     }
   }
   if (anotherGame !== 'y') break;
   resetScores(score);
-  prompt('Another round? (y or n)');
+  prompt('Would you like to play a new round? (y or n)');
   anotherGame = readline.question().toLowerCase()[0];
 }
 
