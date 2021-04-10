@@ -244,7 +244,7 @@ while (true) {
       prompt('It\'s a tie');
     }
 
-    console.log('----- SCORE -----');
+    console.log('----- CURRENT SCORE -----');
     prompt(`You: ${score[PLAYERS[0]]}`);
     prompt(`Computer: ${score[PLAYERS[1]]}`);
     isGrandWinner(score);
