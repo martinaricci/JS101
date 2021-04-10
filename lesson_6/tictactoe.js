@@ -9,6 +9,7 @@ const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = '0';
 const WINNING_SCORE = 5;
 const PLAYERS = ['player', 'computer'];
+const playAgainValidAnswers = ['yes', 'y', 'no', 'n'];
 const WINNING_LINES = [
   [1, 2, 3],
   [4, 5, 6],
@@ -19,6 +20,7 @@ const WINNING_LINES = [
   [1, 5, 9],
   [3, 5, 7]
 ];
+let playAgain;
 
 let displayBoard = (board) => {
   console.clear();
@@ -182,10 +184,14 @@ let isGrandWinner = (score) => {
   }
 };
 
-// ----------------------
-let anotherGame = 'y';
+let isValidAnswer = (arr) => {
+  return arr.includes(playAgain.toLowerCase() || playAgain.toLowerCase()[0]);
+};
 
-while (anotherGame === 'y') {
+// ----------------------
+// let playAgain = 'y';
+
+while (true) {
   console.clear();
   let turn;
   turn = greetAndChoosePlayer();
@@ -242,10 +248,16 @@ while (anotherGame === 'y') {
       readline.question();
     }
   }
-  if (anotherGame !== 'y') break;
+
   resetScores(score);
   prompt('Would you like to play a new round? (y or n)');
-  anotherGame = readline.question().toLowerCase()[0];
+  playAgain = readline.question();
+
+  while (!isValidAnswer(playAgainValidAnswers)) {
+    prompt('Please respond with yes or no (y or n)');
+    playAgain = readline.question();
+  }
+  if (playAgain === 'n' || playAgain === 'no') break;
 }
 
 console.clear();
