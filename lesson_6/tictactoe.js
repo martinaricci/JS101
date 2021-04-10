@@ -122,7 +122,6 @@ let computerChoosesSquare = board => {
   let squareToAttackHuman = findSquareAtRisk(board, COMPUTER_MARKER);
   let emptySquareFive = findSquareFive(board);
   square = squareToAttackHuman || squareAtRiskForHuman || emptySquareFive;
-  // console.log(square)
 
   if (square === null) {
     let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
@@ -172,14 +171,14 @@ let someoneWon = board => {
 };
 
 let resetScores = (score) => {
-  score['player'] = 0;
-  score['computer'] = 0;
+  score[PLAYERS[0]] = 0;
+  score[PLAYERS[1]] = 0;
 };
 
 let isGrandWinner = (score) => {
-  if (score['player'] === WINNING_SCORE) {
+  if (score[PLAYERS[0]] === WINNING_SCORE) {
     prompt('YOU ARE THE GRAND WINNER');
-  } else if (score['computer'] === WINNING_SCORE) {
+  } else if (score[PLAYERS[1]] === WINNING_SCORE) {
     prompt('COMPUTER IS THE GRAND WINNER');
   }
 };
@@ -189,18 +188,18 @@ let isValidAnswer = (arr) => {
 };
 
 let chooseSquare = (board, currentPlayer) => {
-  if (currentPlayer === 'player') {
+  if (currentPlayer === PLAYERS[0]) {
     playerChoosesSquare(board);
-  } else if (currentPlayer === 'computer') {
+  } else if (currentPlayer === PLAYERS[1]) {
     computerChoosesSquare(board);
   }
 };
 
 let alternatePlayer = currentPlayer => {
-  if (currentPlayer === 'player') {
-    currentPlayer = 'computer';
-  } else if (currentPlayer === 'computer') {
-    currentPlayer = 'player';
+  if (currentPlayer === PLAYERS[0]) {
+    currentPlayer = PLAYERS[1];
+  } else if (currentPlayer === PLAYERS[1]) {
+    currentPlayer = PLAYERS[0];
   }
   return currentPlayer;
 };
@@ -218,7 +217,7 @@ while (true) {
 
   let score = initializeScore();
 
-  while ((score['player'] < 5) && (score['computer'] < 5)) {
+  while ((score[PLAYERS[0]] < 5) && (score[PLAYERS[1]] < 5)) {
     let board = initializeBoard();
 
     while (true) {
@@ -230,34 +229,34 @@ while (true) {
 
     if (someoneWon(board)) {
       if (detectWinner(board) === 'You') {
-        score['player'] += 1;
+        score[PLAYERS[0]] += 1;
       } else {
-        score['computer'] += 1;
+        score[PLAYERS[1]] += 1;
       }
       displayBoard(board);
-      prompt(`${detectWinner(board)} won this match.`);
+      prompt(`${detectWinner(board)} won this round.`);
     } else {
       displayBoard(board);
       prompt('It\'s a tie');
     }
 
-    console.log('----- SCORE -----');
-    prompt(`You: ${score['player']}`);
-    prompt(`Computer: ${score['computer']}`);
+    console.log('----- CURRENT SCORE -----');
+    prompt(`You: ${score[PLAYERS[0]]}`);
+    prompt(`Computer: ${score[PLAYERS[1]]}`);
     isGrandWinner(score);
 
-    if ((score['player'] < 5) && (score['computer'] < 5)) {
+    if ((score[PLAYERS[0]] < 5) && (score[PLAYERS[1]] < 5)) {
       prompt("Press 'Enter' to play again");
       readline.question();
     }
   }
 
   resetScores(score);
-  prompt('Would you like to play a new round? (y or n)');
+  prompt('Would you like to play a new match? (yes or no)');
   playAgain = readline.question();
 
   while (!isValidAnswer(PLAY_AGAIN_VALID_ANSWERS)) {
-    prompt('Please respond with yes or no (y or n)');
+    prompt('Please respond with (yes or no)');
     playAgain = readline.question();
   }
   if (playAgain === 'n' || playAgain === 'no') break;
