@@ -188,41 +188,44 @@ let isValidAnswer = (arr) => {
   return arr.includes(playAgain.toLowerCase() || playAgain.toLowerCase()[0]);
 };
 
-// ----------------------
-// let playAgain = 'y';
+let chooseSquare = (board, currentPlayer) => {
+  if (currentPlayer === 'player') {
+    playerChoosesSquare(board);
+  } else if (currentPlayer === 'computer') {
+    computerChoosesSquare(board);
+  }
+};
 
+let alternatePlayer = currentPlayer => {
+  if (currentPlayer === 'player') {
+    currentPlayer = 'computer';
+  } else if (currentPlayer === 'computer') {
+    currentPlayer = 'player';
+  }
+  return currentPlayer;
+};
+
+// ----------------------
 while (true) {
   console.clear();
-  let turn;
-  turn = greetAndChoosePlayer();
+  let currentPlayer;
+  currentPlayer = greetAndChoosePlayer();
 
-  while (turn !== PLAYERS[0] && turn !== PLAYERS[1]) {
+  while (currentPlayer !== PLAYERS[0] && currentPlayer !== PLAYERS[1]) {
     console.log(`Please choose between ${PLAYERS[0]} and ${PLAYERS[1]}`);
-    turn = readline.question();
+    currentPlayer = readline.question();
   }
 
-  // console.log(turn);
   let score = initializeScore();
 
   while ((score['player'] < 5) && (score['computer'] < 5)) {
     let board = initializeBoard();
 
-    while (turn === 'computer') {
-      computerChoosesSquare(board);
+    while (true) {
       displayBoard(board);
+      chooseSquare(board, currentPlayer);
+      currentPlayer = alternatePlayer(currentPlayer);
       if (someoneWon(board) || boardFull(board)) break;
-      playerChoosesSquare(board);
-      if (someoneWon(board) || boardFull(board)) break;
-      turn = 'computer';
-    }
-
-    while (turn === 'player') {
-      displayBoard(board);
-      playerChoosesSquare(board);
-      if (someoneWon(board) || boardFull(board)) break;
-      computerChoosesSquare(board);
-      if (someoneWon(board) || boardFull(board)) break;
-      turn = 'player';
     }
 
     if (someoneWon(board)) {
