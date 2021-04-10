@@ -9,7 +9,7 @@ const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = '0';
 const WINNING_SCORE = 5;
 const PLAYERS = ['player', 'computer'];
-const playAgainValidAnswers = ['yes', 'y', 'no', 'n'];
+const PLAY_AGAIN_VALID_ANSWERS = ['yes', 'y', 'no', 'n'];
 const WINNING_LINES = [
   [1, 2, 3],
   [4, 5, 6],
@@ -256,7 +256,7 @@ while (true) {
   prompt('Would you like to play a new round? (y or n)');
   playAgain = readline.question();
 
-  while (!isValidAnswer(playAgainValidAnswers)) {
+  while (!isValidAnswer(PLAY_AGAIN_VALID_ANSWERS)) {
     prompt('Please respond with yes or no (y or n)');
     playAgain = readline.question();
   }
