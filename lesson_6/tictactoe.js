@@ -43,8 +43,8 @@ let displayBoard = (board) => {
 
 let greetAndChoosePlayer = () => {
   console.log('** Welcome to Tic Tac Toe! :) **');
-  console.log('Wins who first scores 5 points. Good luck!');
-  console.log(`Who should start first: ${PLAYERS[0]} or ${PLAYERS[1]}?`);
+  console.log('The first to score 5 points wins. Good luck!');
+  console.log(`Who plays first: ${PLAYERS[0]} or ${PLAYERS[1]}?`);
   return readline.question();
 };
 
@@ -122,7 +122,6 @@ let computerChoosesSquare = board => {
   let squareToAttackHuman = findSquareAtRisk(board, COMPUTER_MARKER);
   let emptySquareFive = findSquareFive(board);
   square = squareToAttackHuman || squareAtRiskForHuman || emptySquareFive;
-  // console.log(square)
 
   if (square === null) {
     let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
@@ -205,12 +204,10 @@ let alternatePlayer = currentPlayer => {
   return currentPlayer;
 };
 
-// ----------------------
 while (true) {
   console.clear();
   let currentPlayer;
   currentPlayer = greetAndChoosePlayer();
-  console.log(currentPlayer);
 
   while (currentPlayer !== PLAYERS[0] && currentPlayer !== PLAYERS[1]) {
     console.log(`Please choose between ${PLAYERS[0]} and ${PLAYERS[1]}`);
@@ -227,7 +224,6 @@ while (true) {
       displayBoard(board);
       chooseSquare(board, turn);
       turn = alternatePlayer(turn);
-      console.log(turn);
       if (someoneWon(board) || boardFull(board)) break;
     }
 
