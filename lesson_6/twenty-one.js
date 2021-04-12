@@ -8,7 +8,7 @@
 // 6. If dealer busts, player wins.
 // 7. Compare cards and declare winner.
 
-const CARD_TYPES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+// const CARD_TYPES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 const CARDS_VALUE = {
   2: 2,
   3: 3,
@@ -24,28 +24,40 @@ const CARDS_VALUE = {
   K: 10,
   A: 11
 };
-let playersCards = [];
-let dealersCards = [];
+// let playersCards = [];
+// let dealersCards = [];
 const WINNING_SCORE = 21;
-const DECK = [];
+// const DECK = [];
 
-let calculateAces = (cardsInHand) => {
-  let cardsInHandValues = cardsInHand.map(card => {
+let cardsValues = cardsInHand => {
+  return cardsInHand.map(card => {
     if (Object.keys(CARDS_VALUE).includes(card)) {
       return CARDS_VALUE[card];
     }
-  })
+
+    return CARDS_VALUE[card];
+  });
+};
+
+let cardsInHandTotal = (cardsValues) => {
   const reducer = (accumulator, currentValue) => accumulator + currentValue;
-  let aceValue = CARDS_VALUE.A;
-  let cardsInHandTotal = cardsInHandValues.reduce(reducer);
-  if (cardsInHandTotal > WINNING_SCORE) {
-    let cardsSorted = cardsInHandValues.sort((a, b) => a - b);
-    aceValue = cardsSorted[cardsSorted.length - 1] = 1;
-    return aceValue;
+  return cardsValues.reduce(reducer);
+};
+
+// -----------------------------------
+let calculateAces = cardsInHand => {
+  let cardsInHandValues = cardsValues(cardsInHand);
+  let total = cardsInHandTotal(cardsInHandValues);
+  if (total > WINNING_SCORE) {
+    let cardsInHandWithAce = cardsInHandValues.map(value => {
+      if (value === 11) value = 1;
+      return value;
+    });
+    return cardsInHandWithAce;
   } else {
-    return aceValue;
+    return cardsInHandValues;
   }
 };
 
 console.log(calculateAces(['2', '3', 'A']));
-console.log(calculateAces(['8', '10', 'A']));
+console.log(calculateAces(['8', 'A', '10']));
