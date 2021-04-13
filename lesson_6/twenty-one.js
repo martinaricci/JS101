@@ -29,7 +29,6 @@ const CARDS_VALUE = {
 let playersCards = [];
 let dealersCards = [];
 const WINNING_SCORE = 21;
-// const DECK = [];
 const MAX_INITIAL_CARDS = 2;
 let playAgain;
 
@@ -64,28 +63,25 @@ let cardsInHandTotal = (cardsValues) => {
   return cardsValues.reduce(reducer);
 };
 
+let calculateAces = cardsInHand => {
+  let total = cardsInHandTotal(cardsInHand);
+  if (total > WINNING_SCORE) {
+    let cardsInHandWithAce = cardsInHand.map(value => {
+      if (value === 11) value = 1;
+      return value;
+    });
+    total = cardsInHandTotal(cardsInHandWithAce)
+    return total;
+  } else {
+    return total;
+  }
+};
+
 let displayCardsInHand = (playerCards) => {
   console.log(`Player's cards: ${playerCards.join(', ')}`);
   let playersCardsValue = cardsValues(playerCards);
-  console.log(`TOTAL: ${cardsInHandTotal(playersCardsValue)}`);
+  console.log(`TOTAL: ${calculateAces(playersCardsValue)}`);
 };
-
-// let calculateAces = cardsInHand => {
-//   let cardsInHandValues = cardsValues(cardsInHand);
-//   let total = cardsInHandTotal(cardsInHandValues);
-//   if (total > WINNING_SCORE) {
-//     let cardsInHandWithAce = cardsInHandValues.map(value => {
-//       if (value === 11) value = 1;
-//       return value;
-//     });
-//     return cardsInHandWithAce;
-//   } else {
-//     return cardsInHandValues;
-//   }
-// };
-
-// console.log(calculateAces(['2', '3', 'A']));
-// console.log(calculateAces(['8', 'A', '10']));
 
 while (true) {
   console.log('*** Welcome to Tewnty-One Game ***');
