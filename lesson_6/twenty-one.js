@@ -30,6 +30,7 @@ let playersCards = [];
 let dealersCards = [];
 const WINNING_SCORE = 21;
 const MAX_INITIAL_CARDS = 2;
+// const PLAYERS = ['player', 'dealer'];
 let playAgain;
 
 let prompt = message => {
@@ -47,6 +48,10 @@ let dealFirstCards = (cards, playerCards) => {
   }
 };
 
+let dealAnotherCard = (cards, playerCards) => {
+  let newCard = dealCards(cards);
+  playerCards.push(newCard);
+};
 
 let cardsValues = cardsInHand => {
   return cardsInHand.map(card => {
@@ -70,27 +75,58 @@ let calculateAces = cardsInHand => {
       if (value === 11) value = 1;
       return value;
     });
-    total = cardsInHandTotal(cardsInHandWithAce)
+    total = cardsInHandTotal(cardsInHandWithAce);
     return total;
   } else {
     return total;
   }
 };
 
-let displayCardsInHand = (playerCards) => {
-  console.log(`Player's cards: ${playerCards.join(', ')}`);
-  let playersCardsValue = cardsValues(playerCards);
-  console.log(`TOTAL: ${calculateAces(playersCardsValue)}`);
+let displayCardsInHand = (playerCards, player) => {
+  player = player.charAt(0).toUpperCase() + player.slice(1);
+  if (player === 'Dealer') {
+    console.log(`${player}'s cards: ${playerCards[0]}, unknown card`);
+  } else {
+    console.log(`${player}'s cards: ${playerCards.join(', ')}`);
+    let playersCardsValue = cardsValues(playerCards);
+    console.log(`TOTAL: ${calculateAces(playersCardsValue)}`);
+  }
 };
 
 while (true) {
+  console.clear();
   console.log('*** Welcome to Tewnty-One Game ***');
+  console.log(' ');
 
   dealFirstCards(CARDS, playersCards);
-  displayCardsInHand(playersCards);
+  displayCardsInHand(playersCards, 'player');
+  console.log(' ');
 
   dealFirstCards(CARDS, dealersCards);
-  displayCardsInHand(dealersCards);
+  displayCardsInHand(dealersCards, 'dealer');
+  console.log(' ');
+
+  let moveDecision;
+  prompt("Hit or Stay? ('h' or 's')");
+  moveDecision = readline.question();
+
+  if (moveDecision === 's') {
+    console.clear();
+    displayCardsInHand(playersCards, 'player');
+    console.log(' ');
+    displayCardsInHand(dealersCards, 'dealer');
+  }
+
+  while (moveDecision === 'h') {
+    console.clear();
+    dealAnotherCard(CARDS, playersCards);
+    displayCardsInHand(playersCards, 'player');
+    console.log(' ');
+    displayCardsInHand(dealersCards, 'dealer');
+    console.log(' ');
+    prompt("Hit or Stay? ('h' or 's')");
+    moveDecision = readline.question();
+  }
 
   prompt('Would you like to play a new match? (yes or no)');
   playAgain = readline.question();
