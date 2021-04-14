@@ -27,6 +27,7 @@ const CARDS_VALUE = {
   A: 11
 };
 let playersCards = [];
+let playersCardsValue = [];
 let dealersCards = [];
 const WINNING_SCORE = 21;
 const MAX_INITIAL_CARDS = 2;
@@ -88,7 +89,7 @@ let displayPlayerCards = (playerCards, player) => {
     console.log(`${player}'s cards: ${playerCards[0]}, unknown card`);
   } else {
     console.log(`${player}'s cards: ${playerCards.join(', ')}`);
-    let playersCardsValue = cardsValues(playerCards);
+    playersCardsValue = cardsValues(playerCards);
     playersTotal = calculateAces(playersCardsValue);
     console.log(`TOTAL: ${playersTotal}`);
   }
@@ -100,6 +101,10 @@ let displayAllDealersCards = (playerCards) => {
   cardsValues(playerCards);
   console.log(`TOTAL: ${dealersTotal}`);
   console.log(' ');
+};
+
+let busted = (total) => {
+  return total > WINNING_SCORE;
 };
 
 while (true) {
@@ -122,7 +127,12 @@ while (true) {
     console.clear();
     dealAnotherCard(CARDS, playersCards);
     displayPlayerCards(playersCards, 'player');
+    playersTotal = cardsInHandTotal(playersCardsValue);
     displayPlayerCards(dealersCards, 'dealer');
+    if (busted(playersTotal)) {
+      prompt('Player busted');
+      break;
+    }
     prompt("Hit or Stay? ('h' or 's')");
     moveDecision = readline.question();
   }
@@ -139,6 +149,11 @@ while (true) {
       dealAnotherCard(CARDS, dealersCards);
       dealersCardsValues = cardsValues(dealersCards);
       dealersTotal += dealersCardsValues[dealersCardsValues.length - 1];
+
+      if (busted(dealersTotal)) {
+        prompt('Player busted');
+        break;
+      }
     }
 
     displayAllDealersCards(dealersCards);
@@ -148,7 +163,7 @@ while (true) {
     prompt('Player won');
   } else if (playersTotal < dealersTotal && dealersTotal <= WINNING_SCORE) {
     prompt('Dealer won');
-  } else {
+  } else if (playersTotal === dealersTotal) {
     prompt('It\'s a tie');
   }
 
