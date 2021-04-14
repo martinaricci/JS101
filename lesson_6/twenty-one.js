@@ -43,14 +43,12 @@ let dealCards = (cards) => {
 
 let dealFirstCards = (cards, playerCards) => {
   while (playerCards.length < MAX_INITIAL_CARDS) {
-    let newCard = dealCards(cards);
-    playerCards.push(newCard);
+    playerCards.push(dealCards(cards));
   }
 };
 
 let dealAnotherCard = (cards, playerCards) => {
-  let newCard = dealCards(cards);
-  playerCards.push(newCard);
+  playerCards.push(dealCards(cards));
 };
 
 let cardsValues = cardsInHand => {
@@ -71,11 +69,11 @@ let cardsInHandTotal = (cardsValues) => {
 let calculateAces = cardsInHand => {
   let total = cardsInHandTotal(cardsInHand);
   if (total > WINNING_SCORE) {
-    let cardsInHandWithAce = cardsInHand.map(value => {
+    let aceValue = cardsInHand.map(value => {
       if (value === 11) value = 1;
       return value;
     });
-    total = cardsInHandTotal(cardsInHandWithAce);
+    total = cardsInHandTotal(aceValue);
     return total;
   } else {
     return total;
@@ -91,6 +89,7 @@ let displayCardsInHand = (playerCards, player) => {
     let playersCardsValue = cardsValues(playerCards);
     console.log(`TOTAL: ${calculateAces(playersCardsValue)}`);
   }
+  console.log(' ');
 };
 
 while (true) {
@@ -100,11 +99,9 @@ while (true) {
 
   dealFirstCards(CARDS, playersCards);
   displayCardsInHand(playersCards, 'player');
-  console.log(' ');
 
   dealFirstCards(CARDS, dealersCards);
   displayCardsInHand(dealersCards, 'dealer');
-  console.log(' ');
 
   let moveDecision;
   prompt("Hit or Stay? ('h' or 's')");
@@ -113,7 +110,6 @@ while (true) {
   if (moveDecision === 's') {
     console.clear();
     displayCardsInHand(playersCards, 'player');
-    console.log(' ');
     displayCardsInHand(dealersCards, 'dealer');
   }
 
@@ -121,9 +117,7 @@ while (true) {
     console.clear();
     dealAnotherCard(CARDS, playersCards);
     displayCardsInHand(playersCards, 'player');
-    console.log(' ');
     displayCardsInHand(dealersCards, 'dealer');
-    console.log(' ');
     prompt("Hit or Stay? ('h' or 's')");
     moveDecision = readline.question();
   }
