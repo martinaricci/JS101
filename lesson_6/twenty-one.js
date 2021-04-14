@@ -30,6 +30,8 @@ let playersCards = [];
 let dealersCards = [];
 const WINNING_SCORE = 21;
 const MAX_INITIAL_CARDS = 2;
+let playersTotal = 0;
+let dealersTotal = 0;
 // const PLAYERS = ['player', 'dealer'];
 let playAgain;
 
@@ -80,15 +82,23 @@ let calculateAces = cardsInHand => {
   }
 };
 
-let displayCardsInHand = (playerCards, player) => {
+let displayPlayerCards = (playerCards, player) => {
   player = player.charAt(0).toUpperCase() + player.slice(1);
   if (player === 'Dealer') {
     console.log(`${player}'s cards: ${playerCards[0]}, unknown card`);
   } else {
     console.log(`${player}'s cards: ${playerCards.join(', ')}`);
     let playersCardsValue = cardsValues(playerCards);
-    console.log(`TOTAL: ${calculateAces(playersCardsValue)}`);
+    playersTotal = calculateAces(playersCardsValue);
+    console.log(`TOTAL: ${playersTotal}`);
   }
+  console.log(' ');
+};
+
+let displayAllDealersCards = (playerCards) => {
+  console.log(`Dealer's cards: ${playerCards.join(', ')}`);
+  cardsValues(playerCards);
+  console.log(`TOTAL: ${dealersTotal}`);
   console.log(' ');
 };
 
@@ -98,28 +108,48 @@ while (true) {
   console.log(' ');
 
   dealFirstCards(CARDS, playersCards);
-  displayCardsInHand(playersCards, 'player');
+  displayPlayerCards(playersCards, 'player');
 
   dealFirstCards(CARDS, dealersCards);
-  displayCardsInHand(dealersCards, 'dealer');
+  displayPlayerCards(dealersCards, 'dealer');
 
+  console.log(dealersCards);
   let moveDecision;
   prompt("Hit or Stay? ('h' or 's')");
   moveDecision = readline.question();
 
-  if (moveDecision === 's') {
-    console.clear();
-    displayCardsInHand(playersCards, 'player');
-    displayCardsInHand(dealersCards, 'dealer');
-  }
-
   while (moveDecision === 'h') {
     console.clear();
     dealAnotherCard(CARDS, playersCards);
-    displayCardsInHand(playersCards, 'player');
-    displayCardsInHand(dealersCards, 'dealer');
+    displayPlayerCards(playersCards, 'player');
+    displayPlayerCards(dealersCards, 'dealer');
     prompt("Hit or Stay? ('h' or 's')");
     moveDecision = readline.question();
+  }
+
+  if (moveDecision === 's') {
+    console.clear();
+    displayPlayerCards(playersCards, 'player');
+    let dealersCardsValues = cardsValues(dealersCards);
+    dealersTotal = cardsInHandTotal(dealersCardsValues);
+    // console.log(dealersCardsValues);
+    // console.log(dealersTotal);
+
+    while (dealersTotal < 17) {
+      dealAnotherCard(CARDS, dealersCards);
+      dealersCardsValues = cardsValues(dealersCards);
+      dealersTotal += dealersCardsValues[dealersCardsValues.length - 1];
+    }
+
+    displayAllDealersCards(dealersCards);
+  }
+
+  if (playersTotal <= WINNING_SCORE && playersTotal > dealersTotal) {
+    prompt('Player won');
+  } else if (playersTotal < dealersTotal && dealersTotal <= WINNING_SCORE) {
+    prompt('Dealer won');
+  } else {
+    prompt('It\'s a tie');
   }
 
   prompt('Would you like to play a new match? (yes or no)');
