@@ -29,12 +29,14 @@ const CARDS_VALUE = {
 let playersCards = [];
 let playersCardsValue = [];
 let dealersCards = [];
+let dealersCardsValues = [];
 const WINNING_SCORE = 21;
 const MAX_INITIAL_CARDS = 2;
 let playersTotal = 0;
 let dealersTotal = 0;
 // const PLAYERS = ['player', 'dealer'];
 let playAgain;
+let moveDecision;
 
 let prompt = message => {
   console.log(`=> ${message}`);
@@ -69,7 +71,7 @@ let cardsInHandTotal = (cardsValues) => {
   return cardsValues.reduce(reducer);
 };
 
-let calculateAces = cardsInHand => {
+let calculateAcesAndTotal = cardsInHand => {
   let total = cardsInHandTotal(cardsInHand);
   if (total > WINNING_SCORE) {
     let aceValue = cardsInHand.map(value => {
@@ -87,10 +89,12 @@ let displayPlayerCards = (playerCards, player) => {
   player = player.charAt(0).toUpperCase() + player.slice(1);
   if (player === 'Dealer') {
     console.log(`${player}'s cards: ${playerCards[0]}, unknown card`);
+    dealersCardsValue = cardsValues(playerCards);
+    dealersTotal = calculateAcesAndTotal(dealersCardsValue);
   } else {
     console.log(`${player}'s cards: ${playerCards.join(', ')}`);
     playersCardsValue = cardsValues(playerCards);
-    playersTotal = calculateAces(playersCardsValue);
+    playersTotal = calculateAcesAndTotal(playersCardsValue);
     console.log(`TOTAL: ${playersTotal}`);
   }
   console.log(' ');
@@ -98,13 +102,27 @@ let displayPlayerCards = (playerCards, player) => {
 
 let displayAllDealersCards = (playerCards) => {
   console.log(`Dealer's cards: ${playerCards.join(', ')}`);
-  cardsValues(playerCards);
   console.log(`TOTAL: ${dealersTotal}`);
   console.log(' ');
 };
 
 let busted = (total) => {
   return total > WINNING_SCORE;
+};
+
+let resetTotals = () => {
+  playersCards = [];
+  dealersCards = [];
+};
+
+let someoneWon = () => {
+  if (playersTotal === dealersTotal) {
+    prompt('It\'s a tie');
+  } else if ((playersTotal < dealersTotal || dealersTotal === WINNING_SCORE) && !busted(dealersTotal)) {
+    prompt('Dealer won');
+  } else if ((playersTotal === WINNING_SCORE || playersTotal > dealersTotal) && !busted(playersTotal)) {
+    prompt('Player won');
+  }
 };
 
 while (true) {
@@ -118,8 +136,8 @@ while (true) {
   dealFirstCards(CARDS, dealersCards);
   displayPlayerCards(dealersCards, 'dealer');
 
-  console.log(dealersCards);
-  let moveDecision;
+  // console.log(dealersCards);
+  // console.log(dealersTotal);
   prompt("Hit or Stay? ('h' or 's')");
   moveDecision = readline.question();
 
@@ -127,10 +145,12 @@ while (true) {
     console.clear();
     dealAnotherCard(CARDS, playersCards);
     displayPlayerCards(playersCards, 'player');
-    playersTotal = cardsInHandTotal(playersCardsValue);
     displayPlayerCards(dealersCards, 'dealer');
+    // console.log(dealersCards);
+    // console.log(dealersTotal);
     if (busted(playersTotal)) {
-      prompt('Player busted');
+      prompt('Player busted. Dealer won.');
+      // console.log(dealersCards);
       break;
     }
     prompt("Hit or Stay? ('h' or 's')");
@@ -140,10 +160,6 @@ while (true) {
   if (moveDecision === 's') {
     console.clear();
     displayPlayerCards(playersCards, 'player');
-    let dealersCardsValues = cardsValues(dealersCards);
-    dealersTotal = cardsInHandTotal(dealersCardsValues);
-    // console.log(dealersCardsValues);
-    // console.log(dealersTotal);
 
     while (dealersTotal < 17) {
       dealAnotherCard(CARDS, dealersCards);
@@ -151,22 +167,21 @@ while (true) {
       dealersTotal += dealersCardsValues[dealersCardsValues.length - 1];
 
       if (busted(dealersTotal)) {
-        prompt('Player busted');
+        displayAllDealersCards(dealersCards);
+        prompt('Dealer busted. You won.');
         break;
       }
     }
+    // console.log(dealersCards);
+    // console.log(dealersTotal);
+  }
 
+  if (!busted(dealersTotal) && !busted(playersTotal)) {
     displayAllDealersCards(dealersCards);
   }
 
-  if (playersTotal <= WINNING_SCORE && playersTotal > dealersTotal) {
-    prompt('Player won');
-  } else if (playersTotal < dealersTotal && dealersTotal <= WINNING_SCORE) {
-    prompt('Dealer won');
-  } else if (playersTotal === dealersTotal) {
-    prompt('It\'s a tie');
-  }
-
+  someoneWon();
+  resetTotals();
   prompt('Would you like to play a new match? (yes or no)');
   playAgain = readline.question();
 
