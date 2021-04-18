@@ -45,6 +45,13 @@ let prompt = message => {
   console.log(`=> ${message}`);
 };
 
+let shuffle = (array) => {
+  for (let index = array.length - 1; index > 0; index--) {
+    let otherIndex = Math.floor(Math.random() * (index + 1)); // 0 to index
+    [array[index], array[otherIndex]] = [array[otherIndex], array[index]]; // swap elements
+  }
+};
+
 let initializeDeck = () => {
   CARDS.forEach(card => {
     CARD_SUITS.forEach(_ => {
@@ -164,12 +171,14 @@ let askNewMatch = () => {
 };
 
 // ---------------------------------------------------
+initializeDeck();
+
 while (true) {
   console.clear();
   console.log('*** Welcome to Tewnty-One Game ***');
   console.log(' ');
+  shuffle(deck);
 
-  initializeDeck();
   dealFirstCards(deck, playersCards);
   dealFirstCards(deck, dealersCards);
   displayTable();
