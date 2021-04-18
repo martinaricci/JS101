@@ -10,8 +10,8 @@
 
 let readline = require('readline-sync');
 
-// const CARD_SUITS = ['c', 'd', 'h', 's'];
-const CARDS = ['2', '3', 'K', 'A'];
+const CARD_SUITS = ['c', 'd', 'h', 's'];
+const CARDS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 const CARD_VALUES = {
   2: 2,
   3: 3,
@@ -27,7 +27,7 @@ const CARD_VALUES = {
   K: 10,
   A: 11
 };
-// let deck = [];
+let deck = [];
 let playersCards = [];
 let playersCardsValue = [];
 let dealersCards = [];
@@ -45,9 +45,15 @@ let prompt = message => {
   console.log(`=> ${message}`);
 };
 
-// let initializeDeck = () => {
+let initializeDeck = () => {
+  CARDS.forEach(card => {
+    CARD_SUITS.forEach(_ => {
+      deck.push(card);
+    });
+  });
 
-// };
+  return deck;
+};
 
 let dealCards = (cards) => {
   return cards[Math.floor(Math.random() * cards.length)];
@@ -80,11 +86,11 @@ let cardsInHandTotal = (cardsValues) => {
 
 let calculateAcesAndTotal = cardsInHand => {
   let total = cardsInHandTotal(cardsInHand);
-  let sorted = cardsInHand.sort((a, b) => a - b);
-  while (total > WINNING_SCORE && sorted[sorted.length - 1] === 11) {
-    sorted[sorted.length - 1] = 1;
-    sorted.sort((a, b) => a - b);
-    total = cardsInHandTotal(sorted);
+  let cardsSorted = cardsInHand.sort((a, b) => a - b);
+  while (total > WINNING_SCORE && cardsSorted[cardsSorted.length - 1] === 11) {
+    cardsSorted[cardsSorted.length - 1] = 1;
+    cardsSorted.sort((a, b) => a - b);
+    total = cardsInHandTotal(cardsSorted);
   }
   return total;
 };
@@ -163,13 +169,14 @@ while (true) {
   console.log('*** Welcome to Tewnty-One Game ***');
   console.log(' ');
 
-  dealFirstCards(CARDS, playersCards);
-  dealFirstCards(CARDS, dealersCards);
+  initializeDeck();
+  dealFirstCards(deck, playersCards);
+  dealFirstCards(deck, dealersCards);
   displayTable();
   askToHitOrStay();
 
   while (moveDecision === 'h') {
-    dealAnotherCard(CARDS, playersCards);
+    dealAnotherCard(deck, playersCards);
     displayTable();
 
     if (busted(playersTotal)) {
@@ -185,7 +192,7 @@ while (true) {
     displayPlayerCards(playersCards, 'player');
 
     while (dealersTotal < 17) {
-      dealAnotherCard(CARDS, dealersCards);
+      dealAnotherCard(deck, dealersCards);
       dealersCardsValues = cardsValues(dealersCards);
       dealersTotal += dealersCardsValues[dealersCardsValues.length - 1];
 
