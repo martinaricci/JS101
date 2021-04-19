@@ -95,7 +95,7 @@ let calculateAcesAndTotal = cardsInHand => {
 let displayPlayerCards = (playerCards, player) => {
   player = player.charAt(0).toUpperCase() + player.slice(1);
   if (player === 'Dealer') {
-    console.log(`${player}'s cards: ${playerCards[0]}, unknown card`);
+    console.log(`${player}'s cards: ${playerCards[0]}, ?`);
     dealersCardsValues = cardsValues(playerCards);
     dealersTotal = calculateAcesAndTotal(dealersCardsValues);
   } else {
