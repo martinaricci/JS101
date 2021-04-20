@@ -19,6 +19,7 @@ const CARD_VALUES = {
 };
 const WINNING_SCORE = 21;
 const MAX_INITIAL_CARDS = 2;
+const MAX_WINS = 5;
 const MOVE_DECISION_VALID_ANSWERS = ['h', 's', 'hit', 'stay'];
 const PLAY_AGAIN_VALID_ANSWERS = ['y', 'n', 'yes', 'no'];
 let deck = [];
@@ -28,7 +29,7 @@ let dealersCards = [];
 let dealersCardsValues = [];
 let playersTotal = 0;
 let dealersTotal = 0;
-let playAgain;
+let anotherMatch;
 let moveDecision;
 
 let prompt = message => {
@@ -122,14 +123,17 @@ let resetTotals = () => {
   dealersCards = [];
 };
 
-let someoneWon = () => {
+let detectWinner = (winner) => {
   if (playersTotal === dealersTotal) {
     prompt('IT\'S A TIE');
   } else if ((playersTotal < dealersTotal || dealersTotal === WINNING_SCORE)) {
     prompt('DEALER WON');
+    winner = 'DEALER';
   } else if ((playersTotal === WINNING_SCORE || playersTotal > dealersTotal)) {
     prompt('PLAYER WON');
+    winner = 'PLAYER';
   }
+  return winner;
 };
 
 let displayTable = () => {
@@ -148,73 +152,118 @@ let askToHitOrStay = () => {
   console.clear();
 };
 
+let anotherRound = () => {
+  prompt("Press 'Enter' to play another round");
+  readline.question().toLowerCase();
+  console.clear();
+};
+
+let displayCurrentScore = (playerWins, dealerWins) => {
+  console.log('-------- CURRENT SCORE -------');
+  console.log(`Player wins: ${playerWins}`);
+  console.log(`Dealer wins: ${dealerWins}`);
+  console.log(' ');
+};
+
+let displayGrandWinner = (dealerWins, playerWins) => {
+  if (dealerWins === MAX_WINS) {
+    prompt('DEALER IS THE GRAND WINNER!');
+  } else if (playerWins === MAX_WINS) {
+    prompt('PLAYER IS THE GRAND WINNER!');
+  }
+};
+
 let askNewMatch = () => {
   prompt('Would you like to play a new match? (y/n)');
-  playAgain = readline.question().toLowerCase();
+  anotherMatch = readline.question().toLowerCase();
 
-  while (!PLAY_AGAIN_VALID_ANSWERS.includes(playAgain)) {
+  while (!PLAY_AGAIN_VALID_ANSWERS.includes(anotherMatch)) {
     prompt("Please choose 'y' or 'n'");
-    playAgain = readline.question().toLowerCase();
+    anotherMatch = readline.question().toLowerCase();
   }
   console.clear();
 };
+
 
 initializeDeck();
 
 while (true) {
   console.clear();
-  console.log('*** Welcome to Tewnty-One Game ***');
+  console.log('*** WELCOME TO TWENTY ONE GAME ***');
+  console.log('Wins who first scores 5 points. Good luck!');
   console.log(' ');
-  shuffle(deck);
+  let playerWins = 0;
+  let dealerWins = 0;
 
-  dealFirstCards(deck, playersCards);
-  dealFirstCards(deck, dealersCards);
-  displayTable();
-  askToHitOrStay();
+  while (playerWins !== MAX_WINS || dealerWins !== MAX_WINS) {
+    shuffle(deck);
+    displayCurrentScore(playerWins, dealerWins);
 
-  while (moveDecision[0] === 'h') {
-    console.log('YOU CHOSE TO HIT');
-    console.log(' ');
-    dealAnotherCard(deck, playersCards);
+    dealFirstCards(deck, playersCards);
+    dealFirstCards(deck, dealersCards);
     displayTable();
+    askToHitOrStay();
 
-    if (busted(playersTotal)) {
-      prompt('Player busted. Dealer won.');
-      break;
+    while (moveDecision[0] === 'h') {
+      console.log('YOU CHOSE TO HIT');
+      console.log(' ');
+      dealAnotherCard(deck, playersCards);
+      displayTable();
+
+      if (busted(playersTotal)) {
+        prompt('You busted. Dealer won.');
+        dealerWins += 1;
+        break;
+      }
+
+      moveDecision = '';
+      askToHitOrStay();
     }
 
-    moveDecision = '';
-    askToHitOrStay();
-  }
+    if (moveDecision[0] === 's') {
+      console.log('YOU CHOSE TO STAY');
+      console.log('Dealer\'s turn...');
+      console.log(' ');
+      displayPlayerCards(playersCards, 'player');
 
-  if (moveDecision[0] === 's') {
-    console.log('YOU CHOSE TO STAY');
-    console.log('Dealer\'s turn...');
-    console.log(' ');
-    displayPlayerCards(playersCards, 'player');
-
-    while (dealersTotal < 17) {
-      dealAnotherCard(deck, dealersCards);
-      dealersCardsValues = cardsValues(dealersCards);
-      dealersTotal += dealersCardsValues[dealersCardsValues.length - 1];
+      while (dealersTotal < 17) {
+        dealAnotherCard(deck, dealersCards);
+        dealersCardsValues = cardsValues(dealersCards);
+        dealersTotal += dealersCardsValues[dealersCardsValues.length - 1];
+      }
 
       if (busted(dealersTotal)) {
         displayAllDealersCards();
         prompt('Dealer busted. You won!');
-        break;
+        playerWins += 1;
       }
     }
+
+    if (!busted(dealersTotal) && !busted(playersTotal)) {
+      displayAllDealersCards();
+      let winner = detectWinner();
+
+      switch (winner) {
+        case 'DEALER':
+          dealerWins += 1;
+          break;
+        case 'PLAYER':
+          playerWins += 1;
+          break;
+      }
+    }
+
+    displayGrandWinner(dealerWins, playerWins);
+
+    resetTotals();
+
+    if (playerWins === MAX_WINS || dealerWins === MAX_WINS) break;
+    anotherRound();
   }
 
-  if (!busted(dealersTotal) && !busted(playersTotal)) {
-    displayAllDealersCards();
-    someoneWon();
-  }
-
-  resetTotals();
   askNewMatch();
 
-  if (playAgain[0] === 'n') break;
+  if (anotherMatch[0] === 'n') break;
 }
 
 console.log('Thanks for playing Twenty One.');
