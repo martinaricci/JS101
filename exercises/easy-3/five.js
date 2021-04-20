@@ -5,7 +5,7 @@
 // 1. Log 5 rows of *
 
 let rowsCounter = 0;
-
+let rows;
 triangle = num => {
     while (rowsCounter < num) {
         for (let i = 0; i < num; i++) {

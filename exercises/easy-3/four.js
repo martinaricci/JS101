@@ -26,6 +26,7 @@ let findFibonacciIndexByLength = length => {
     return index;
 }
 
-console.log(findFibonacciIndexByLength(2));       // 7
-console.log(findFibonacciIndexByLength(10));      // 45
+// console.log(findFibonacciIndexByLength(2));       // 7
+// console.log(findFibonacciIndexByLength(10));      // 45
 console.log(findFibonacciIndexByLength(16));      // 74
+console.log(fibonacci(16));
