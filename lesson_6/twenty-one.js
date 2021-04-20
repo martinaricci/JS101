@@ -18,17 +18,18 @@ const CARD_VALUES = {
   A: 11
 };
 const WINNING_SCORE = 21;
+const DEALER_THRESHOLD = 17;
 const MAX_INITIAL_CARDS = 2;
 const MAX_WINS = 5;
 const MOVE_DECISION_VALID_ANSWERS = ['h', 's', 'hit', 'stay'];
 const PLAY_AGAIN_VALID_ANSWERS = ['y', 'n', 'yes', 'no'];
 let deck = [];
-let playersCards = [];
-let playersCardsValue = [];
-let dealersCards = [];
-let dealersCardsValues = [];
-let playersTotal = 0;
-let dealersTotal = 0;
+let playerCards = [];
+let playerCardsValue = [];
+let dealerCards = [];
+let dealerCardsValue = [];
+let playerTotal = 0;
+let dealerTotal = 0;
 let anotherMatch;
 let moveDecision;
 
@@ -97,20 +98,20 @@ let displayHand = (playerCards, player) => {
   player = player.charAt(0).toUpperCase() + player.slice(1);
   if (player === 'Dealer') {
     console.log(`${player}'s cards: ${playerCards[0]}, ?`);
-    dealersCardsValues = cardsValues(playerCards);
-    dealersTotal = calculateAcesAndTotal(dealersCardsValues);
+    dealerCardsValue = cardsValues(playerCards);
+    dealerTotal = calculateAcesAndTotal(dealerCardsValue);
   } else {
     console.log(`${player}'s cards: ${playerCards.join(', ')}`);
-    playersCardsValue = cardsValues(playerCards);
-    playersTotal = calculateAcesAndTotal(playersCardsValue);
-    console.log(`TOTAL: ${playersTotal}`);
+    playerCardsValue = cardsValues(playerCards);
+    playerTotal = calculateAcesAndTotal(playerCardsValue);
+    console.log(`TOTAL: ${playerTotal}`);
   }
   console.log(' ');
 };
 
 let displayAllDealersCards = () => {
-  console.log(`Dealer's cards: ${dealersCards.join(', ')}`);
-  console.log(`TOTAL: ${dealersTotal}`);
+  console.log(`Dealer's cards: ${dealerCards.join(', ')}`);
+  console.log(`TOTAL: ${dealerTotal}`);
   console.log(' ');
 };
 
@@ -119,17 +120,17 @@ let busted = (total) => {
 };
 
 let resetTotals = () => {
-  playersCards = [];
-  dealersCards = [];
+  playerCards = [];
+  dealerCards = [];
 };
 
 let detectWinner = (winner) => {
-  if (playersTotal === dealersTotal) {
+  if (playerTotal === dealerTotal) {
     prompt('IT\'S A TIE');
-  } else if ((playersTotal < dealersTotal || dealersTotal === WINNING_SCORE)) {
+  } else if ((playerTotal < dealerTotal || dealerTotal === WINNING_SCORE)) {
     prompt('DEALER WON');
     winner = 'DEALER';
-  } else if ((playersTotal === WINNING_SCORE || playersTotal > dealersTotal)) {
+  } else if ((playerTotal === WINNING_SCORE || playerTotal > dealerTotal)) {
     prompt('PLAYER WON');
     winner = 'PLAYER';
   }
@@ -137,8 +138,8 @@ let detectWinner = (winner) => {
 };
 
 let displayTable = () => {
-  displayHand(playersCards, 'player');
-  displayHand(dealersCards, 'dealer');
+  displayHand(playerCards, 'player');
+  displayHand(dealerCards, 'dealer');
 };
 
 let askToHitOrStay = () => {
@@ -199,18 +200,18 @@ while (true) {
     shuffle(deck);
     displayCurrentScore(playerWins, dealerWins);
 
-    dealFirstCards(deck, playersCards);
-    dealFirstCards(deck, dealersCards);
+    dealFirstCards(deck, playerCards);
+    dealFirstCards(deck, dealerCards);
     displayTable();
     askToHitOrStay();
 
     while (moveDecision[0] === 'h') {
       console.log('YOU CHOSE TO HIT');
       console.log(' ');
-      dealAnotherCard(deck, playersCards);
+      dealAnotherCard(deck, playerCards);
       displayTable();
 
-      if (busted(playersTotal)) {
+      if (busted(playerTotal)) {
         prompt('You busted. Dealer won.');
         dealerWins += 1;
         break;
@@ -224,22 +225,22 @@ while (true) {
       console.log('YOU CHOSE TO STAY');
       console.log('Dealer\'s turn...');
       console.log(' ');
-      displayHand(playersCards, 'player');
+      displayHand(playerCards, 'player');
 
-      while (dealersTotal < 17) {
-        dealAnotherCard(deck, dealersCards);
-        dealersCardsValues = cardsValues(dealersCards);
-        dealersTotal += dealersCardsValues[dealersCardsValues.length - 1];
+      while (dealerTotal < DEALER_THRESHOLD) {
+        dealAnotherCard(deck, dealerCards);
+        dealerCardsValue = cardsValues(dealerCards);
+        dealerTotal += dealerCardsValue[dealerCardsValue.length - 1];
       }
 
-      if (busted(dealersTotal)) {
+      if (busted(dealerTotal)) {
         displayAllDealersCards();
         prompt('Dealer busted. You won!');
         playerWins += 1;
       }
     }
 
-    if (!busted(dealersTotal) && !busted(playersTotal)) {
+    if (!busted(dealerTotal) && !busted(playerTotal)) {
       displayAllDealersCards();
       let winner = detectWinner();
 
