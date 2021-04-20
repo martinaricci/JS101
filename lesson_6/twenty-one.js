@@ -170,7 +170,7 @@ let displayGrandWinner = (dealerWins, playerWins) => {
   if (dealerWins === MAX_WINS) {
     prompt('DEALER IS THE GRAND WINNER!');
   } else if (playerWins === MAX_WINS) {
-    prompt('PLAYER IS THE GRAND WINNER!');
+    prompt('YOU ARE THE GRAND WINNER!');
   }
 };
 
