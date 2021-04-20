@@ -8,6 +8,7 @@ const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = '0';
 const WINNING_SCORE = 5;
+const MIDDLE_SQUARE = 5;
 const PLAYERS = ['player', 'computer'];
 const PLAY_AGAIN_VALID_ANSWERS = ['yes', 'y', 'no', 'n'];
 const WINNING_LINES = [
@@ -43,7 +44,7 @@ let displayBoard = (board) => {
 
 let greetAndChoosePlayer = () => {
   console.log('** Welcome to Tic Tac Toe! :) **');
-  console.log('The first to score 5 points wins. Good luck!');
+  console.log(`The first to score ${WINNING_SCORE} points wins. Good luck!`);
   console.log(`Who plays first: ${PLAYERS[0]} or ${PLAYERS[1]}?`);
   return readline.question();
 };
@@ -107,7 +108,7 @@ let findSquareFive = board => {
   let squareFive;
   for (let index = 0; index < WINNING_LINES.length; index++) {
     let line = WINNING_LINES[index];
-    squareFive = line.find(square => square === 5);
+    squareFive = line.find(square => square === MIDDLE_SQUARE);
     if (board[squareFive] === INITIAL_MARKER) {
       return squareFive;
     }
@@ -171,14 +172,14 @@ let someoneWon = board => {
 };
 
 let resetScores = (score) => {
-  score[PLAYERS[0]] = 0;
-  score[PLAYERS[1]] = 0;
+  score.player = 0;
+  score.computer = 0;
 };
 
 let isGrandWinner = (score) => {
-  if (score[PLAYERS[0]] === WINNING_SCORE) {
+  if (score.player === WINNING_SCORE) {
     prompt('YOU ARE THE GRAND WINNER');
-  } else if (score[PLAYERS[1]] === WINNING_SCORE) {
+  } else if (score.computer === WINNING_SCORE) {
     prompt('COMPUTER IS THE GRAND WINNER');
   }
 };
@@ -216,7 +217,7 @@ while (true) {
 
   let score = initializeScore();
 
-  while ((score[PLAYERS[0]] < 5) && (score[PLAYERS[1]] < 5)) {
+  while ((score.player < WINNING_SCORE) && (score.computer < WINNING_SCORE)) {
     let board = initializeBoard();
     let turn = currentPlayer;
 
@@ -229,9 +230,9 @@ while (true) {
 
     if (someoneWon(board)) {
       if (detectWinner(board) === 'You') {
-        score[PLAYERS[0]] += 1;
+        score.player += 1;
       } else {
-        score[PLAYERS[1]] += 1;
+        score.computer += 1;
       }
       displayBoard(board);
       prompt(`${detectWinner(board)} won this round.`);
@@ -241,11 +242,11 @@ while (true) {
     }
 
     console.log('----- CURRENT SCORE -----');
-    prompt(`You: ${score[PLAYERS[0]]}`);
-    prompt(`Computer: ${score[PLAYERS[1]]}`);
+    prompt(`You: ${score.player}`);
+    prompt(`Computer: ${score.computer}`);
     isGrandWinner(score);
 
-    if ((score[PLAYERS[0]] < 5) && (score[PLAYERS[1]] < 5)) {
+    if ((score.player < WINNING_SCORE) && (score.computer < WINNING_SCORE)) {
       prompt("Press 'Enter' to play again");
       readline.question();
     }
