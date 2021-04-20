@@ -93,7 +93,7 @@ let calculateAcesAndTotal = cardsInHand => {
   return total;
 };
 
-let displayPlayerCards = (playerCards, player) => {
+let displayHand = (playerCards, player) => {
   player = player.charAt(0).toUpperCase() + player.slice(1);
   if (player === 'Dealer') {
     console.log(`${player}'s cards: ${playerCards[0]}, ?`);
@@ -137,8 +137,8 @@ let detectWinner = (winner) => {
 };
 
 let displayTable = () => {
-  displayPlayerCards(playersCards, 'player');
-  displayPlayerCards(dealersCards, 'dealer');
+  displayHand(playersCards, 'player');
+  displayHand(dealersCards, 'dealer');
 };
 
 let askToHitOrStay = () => {
@@ -224,7 +224,7 @@ while (true) {
       console.log('YOU CHOSE TO STAY');
       console.log('Dealer\'s turn...');
       console.log(' ');
-      displayPlayerCards(playersCards, 'player');
+      displayHand(playersCards, 'player');
 
       while (dealersTotal < 17) {
         dealAnotherCard(deck, dealersCards);
