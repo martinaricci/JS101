@@ -113,9 +113,6 @@ let displayHand = (playerCards, player) => {
 let displayAllDealersCards = () => {
   let valueAndSuitJoined = dealerCards.map(card => card.join(' '));
   console.log(`Dealer's cards: ${valueAndSuitJoined.join(' , ')}`);
-  // dealerCardsValue = cardsValues(dealerCards);
-  // console.log(dealerCardsValue);
-  // dealerTotal = calculateAcesAndTotal(dealerCardsValue);
   console.log(`TOTAL: ${dealerTotal}`);
   console.log(' ');
 };
@@ -240,8 +237,8 @@ while (true) {
       while (dealerTotal < DEALER_THRESHOLD) {
         dealAnotherCard(deck, dealerCards);
         dealerCardsValue = cardsValues(dealerCards);
-        // console.log(dealerCardsValue);
         dealerTotal += dealerCardsValue[dealerCardsValue.length - 1];
+        dealerTotal = calculateAcesAndTotal(dealerCardsValue);
       }
 
       if (busted(dealerTotal)) {
