@@ -23,7 +23,6 @@ const MAX_INITIAL_CARDS = 2;
 const MAX_WINS = 5;
 const MOVE_DECISION_VALID_ANSWERS = ['h', 's', 'hit', 'stay'];
 const PLAY_AGAIN_VALID_ANSWERS = ['y', 'n', 'yes', 'no'];
-// let deck = [];
 let playerCards = [];
 let playerCardsValue = [];
 let dealerCards = [];
