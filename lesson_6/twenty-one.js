@@ -1,6 +1,6 @@
 let readline = require('readline-sync');
 
-const CARD_SUITS = ['c', 'd', 'h', 's'];
+const CARD_SUITS = ['♧', '♢', '♡', '♤'];
 const CARDS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 const CARD_VALUES = {
   2: 2,
@@ -46,8 +46,8 @@ let shuffle = (array) => {
 
 let initializeDeck = () => {
   CARDS.forEach(card => {
-    CARD_SUITS.forEach(_ => {
-      deck.push(card);
+    CARD_SUITS.forEach(suit => {
+      deck.push([card, suit]);
     });
   });
 
@@ -70,11 +70,11 @@ let dealAnotherCard = (cards, playerCards) => {
 
 let cardsValues = cardsInHand => {
   return cardsInHand.map(card => {
-    if (Object.keys(CARD_VALUES).includes(card)) {
-      return CARD_VALUES[card];
+    if (Object.keys(CARD_VALUES).includes(card[0])) {
+      return CARD_VALUES[card[0]];
     }
 
-    return CARD_VALUES[card];
+    return CARD_VALUES[card[0]];
   });
 };
 
@@ -96,12 +96,13 @@ let calculateAcesAndTotal = cardsInHand => {
 
 let displayHand = (playerCards, player) => {
   player = player.charAt(0).toUpperCase() + player.slice(1);
+  let valueAndSuitJoined = playerCards.map(card => card.join(' '));
   if (player === 'Dealer') {
-    console.log(`${player}'s cards: ${playerCards[0]}, ?`);
+    console.log(`${player}'s cards: ${valueAndSuitJoined[0]} , ?`);
     dealerCardsValue = cardsValues(playerCards);
     dealerTotal = calculateAcesAndTotal(dealerCardsValue);
   } else {
-    console.log(`${player}'s cards: ${playerCards.join(', ')}`);
+    console.log(`${player}'s cards: ${valueAndSuitJoined.join(' , ')}`);
     playerCardsValue = cardsValues(playerCards);
     playerTotal = calculateAcesAndTotal(playerCardsValue);
     console.log(`TOTAL: ${playerTotal}`);
@@ -110,7 +111,11 @@ let displayHand = (playerCards, player) => {
 };
 
 let displayAllDealersCards = () => {
-  console.log(`Dealer's cards: ${dealerCards.join(', ')}`);
+  let valueAndSuitJoined = dealerCards.map(card => card.join(' '));
+  console.log(`Dealer's cards: ${valueAndSuitJoined.join(' , ')}`);
+  // dealerCardsValue = cardsValues(dealerCards);
+  // console.log(dealerCardsValue);
+  // dealerTotal = calculateAcesAndTotal(dealerCardsValue);
   console.log(`TOTAL: ${dealerTotal}`);
   console.log(' ');
 };
@@ -212,6 +217,11 @@ while (true) {
       displayTable();
 
       if (busted(playerTotal)) {
+        console.clear();
+        console.log('YOU CHOSE TO HIT');
+        console.log(' ');
+        displayHand(playerCards, 'player');
+        displayAllDealersCards();
         prompt('You busted. Dealer won.');
         dealerWins += 1;
         break;
@@ -230,6 +240,7 @@ while (true) {
       while (dealerTotal < DEALER_THRESHOLD) {
         dealAnotherCard(deck, dealerCards);
         dealerCardsValue = cardsValues(dealerCards);
+        // console.log(dealerCardsValue);
         dealerTotal += dealerCardsValue[dealerCardsValue.length - 1];
       }
 
