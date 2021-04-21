@@ -116,7 +116,7 @@ let displayHand = (playerCards, player) => {
   console.log(' ');
 };
 
-let displayAllDealersCards = () => {
+let displayAllDealerCards = () => {
   let valueAndSuitJoined = dealerCards.map(card => card.join(' '));
   console.log(`Dealer's cards: ${valueAndSuitJoined.join(' , ')}`);
   console.log(`TOTAL: ${dealerTotal}`);
@@ -249,7 +249,7 @@ while (true) {
         console.log('YOU CHOSE TO HIT');
         console.log(' ');
         displayHand(playerCards, 'player');
-        displayAllDealersCards();
+        displayAllDealerCards();
         prompt('You busted. Dealer won.');
         dealerWins += 1;
         break;
@@ -260,14 +260,14 @@ while (true) {
       dealerTurn();
 
       if (busted(dealerTotal)) {
-        displayAllDealersCards();
+        displayAllDealerCards();
         prompt('Dealer busted. You won!');
         playerWins += 1;
       }
     }
 
     if (!busted(dealerTotal) && !busted(playerTotal)) {
-      displayAllDealersCards();
+      displayAllDealerCards();
       let winner = detectWinner();
 
       switch (winner) {
