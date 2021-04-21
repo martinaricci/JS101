@@ -23,7 +23,7 @@ const MAX_INITIAL_CARDS = 2;
 const MAX_WINS = 5;
 const MOVE_DECISION_VALID_ANSWERS = ['h', 's', 'hit', 'stay'];
 const PLAY_AGAIN_VALID_ANSWERS = ['y', 'n', 'yes', 'no'];
-let deck = [];
+// let deck = [];
 let playerCards = [];
 let playerCardsValue = [];
 let dealerCards = [];
@@ -51,17 +51,21 @@ let shuffle = (array) => {
 };
 
 let initializeDeck = () => {
+  let deck = [];
+
   CARDS.forEach(card => {
     CARD_SUITS.forEach(suit => {
       deck.push([card, suit]);
     });
   });
 
+  shuffle(deck);
+
   return deck;
 };
 
 let dealCards = (cards) => {
-  return cards[Math.floor(Math.random() * cards.length)];
+  return cards.pop();
 };
 
 let dealFirstCards = (cards, playerCards) => {
@@ -197,7 +201,7 @@ let askNewMatch = () => {
   console.clear();
 };
 
-let playerTurn = () => {
+let playerTurn = (deck) => {
   console.log('YOU CHOSE TO HIT');
   console.log(' ');
   dealAnotherCard(deck, playerCards);
@@ -209,7 +213,7 @@ let playerTurn = () => {
   }
 };
 
-let dealerTurn = () => {
+let dealerTurn = (deck) => {
   console.log('YOU CHOSE TO STAY');
   console.log('Dealer\'s turn...');
   console.log(' ');
@@ -223,8 +227,6 @@ let dealerTurn = () => {
   }
 };
 
-initializeDeck();
-
 while (true) {
   console.clear();
   initialMessage();
@@ -233,16 +235,15 @@ while (true) {
   let dealerWins = 0;
 
   while (!someoneIsGrandWinner(playerWins, dealerWins)) {
-    shuffle(deck);
+    let deck = initializeDeck();
     displayCurrentScore(playerWins, dealerWins);
-
     dealFirstCards(deck, playerCards);
     dealFirstCards(deck, dealerCards);
     displayTable();
     askToHitOrStay();
 
     while (moveDecision[0] === 'h') {
-      playerTurn();
+      playerTurn(deck);
 
       if (busted(playerTotal)) {
         console.clear();
@@ -257,7 +258,7 @@ while (true) {
     }
 
     if (moveDecision[0] === 's') {
-      dealerTurn();
+      dealerTurn(deck);
 
       if (busted(dealerTotal)) {
         displayAllDealerCards();
@@ -281,7 +282,6 @@ while (true) {
     }
 
     displayGrandWinner(dealerWins, playerWins);
-
     resetTotals();
 
     if (someoneIsGrandWinner(playerWins, dealerWins)) break;
@@ -289,7 +289,6 @@ while (true) {
   }
 
   askNewMatch();
-
   if (anotherMatch[0] === 'n') break;
 }
 
