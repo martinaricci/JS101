@@ -37,6 +37,12 @@ let prompt = message => {
   console.log(`=> ${message}`);
 };
 
+let initialMessage = () => {
+  console.log('*** WELCOME TO TWENTY ONE GAME ***');
+  console.log('Wins who first scores 5 points. Good luck!');
+  console.log(' ');
+};
+
 let shuffle = (array) => {
   for (let index = array.length - 1; index > 0; index--) {
     let otherIndex = Math.floor(Math.random() * (index + 1)); // 0 to index
@@ -176,6 +182,10 @@ let displayGrandWinner = (dealerWins, playerWins) => {
   }
 };
 
+let someoneIsGrandWinner = (playerWins, dealerWins) => {
+  return playerWins === MAX_WINS || dealerWins === MAX_WINS;
+};
+
 let askNewMatch = () => {
   prompt('Would you like to play a new match? (y/n)');
   anotherMatch = readline.question().toLowerCase();
@@ -187,18 +197,42 @@ let askNewMatch = () => {
   console.clear();
 };
 
+let playerTurn = () => {
+  console.log('YOU CHOSE TO HIT');
+  console.log(' ');
+  dealAnotherCard(deck, playerCards);
+  displayTable();
+
+  if (!busted(playerTotal)) {
+    moveDecision = '';
+    askToHitOrStay();
+  }
+};
+
+let dealerTurn = () => {
+  console.log('YOU CHOSE TO STAY');
+  console.log('Dealer\'s turn...');
+  console.log(' ');
+  displayHand(playerCards, 'player');
+
+  while (dealerTotal < DEALER_THRESHOLD) {
+    dealAnotherCard(deck, dealerCards);
+    dealerCardsValue = cardsValues(dealerCards);
+    dealerTotal += dealerCardsValue[dealerCardsValue.length - 1];
+    dealerTotal = calculateAcesAndTotal(dealerCardsValue);
+  }
+};
 
 initializeDeck();
 
 while (true) {
   console.clear();
-  console.log('*** WELCOME TO TWENTY ONE GAME ***');
-  console.log('Wins who first scores 5 points. Good luck!');
-  console.log(' ');
+  initialMessage();
+
   let playerWins = 0;
   let dealerWins = 0;
 
-  while (playerWins !== MAX_WINS || dealerWins !== MAX_WINS) {
+  while (!someoneIsGrandWinner(playerWins, dealerWins)) {
     shuffle(deck);
     displayCurrentScore(playerWins, dealerWins);
 
@@ -208,10 +242,7 @@ while (true) {
     askToHitOrStay();
 
     while (moveDecision[0] === 'h') {
-      console.log('YOU CHOSE TO HIT');
-      console.log(' ');
-      dealAnotherCard(deck, playerCards);
-      displayTable();
+      playerTurn();
 
       if (busted(playerTotal)) {
         console.clear();
@@ -223,23 +254,10 @@ while (true) {
         dealerWins += 1;
         break;
       }
-
-      moveDecision = '';
-      askToHitOrStay();
     }
 
     if (moveDecision[0] === 's') {
-      console.log('YOU CHOSE TO STAY');
-      console.log('Dealer\'s turn...');
-      console.log(' ');
-      displayHand(playerCards, 'player');
-
-      while (dealerTotal < DEALER_THRESHOLD) {
-        dealAnotherCard(deck, dealerCards);
-        dealerCardsValue = cardsValues(dealerCards);
-        dealerTotal += dealerCardsValue[dealerCardsValue.length - 1];
-        dealerTotal = calculateAcesAndTotal(dealerCardsValue);
-      }
+      dealerTurn();
 
       if (busted(dealerTotal)) {
         displayAllDealersCards();
@@ -266,7 +284,7 @@ while (true) {
 
     resetTotals();
 
-    if (playerWins === MAX_WINS || dealerWins === MAX_WINS) break;
+    if (someoneIsGrandWinner(playerWins, dealerWins)) break;
     anotherRound();
   }
 
