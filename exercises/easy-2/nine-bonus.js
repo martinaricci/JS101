@@ -56,4 +56,5 @@ let hexadecimalToInteger = (str) => {
     return res;
 };
 
+
 console.log(hexadecimalToInteger('4D9f'));
