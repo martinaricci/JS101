@@ -22,9 +22,9 @@ const DIGITS = {
 
 let value = 0; 
 for (let i = 0; i < str.length; i++) {
-    num = Object.values(DIGITS).find(num => num == str[i]);
-    value = (value * 10) + num;
-  }
+  num = Object.values(DIGITS).find(num => num == str[i]);
+  value = (value * 10) + num;
+}
 console.log(value);
 return num;
 
