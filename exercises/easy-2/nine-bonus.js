@@ -47,7 +47,6 @@ let hexadecimalToInteger = (str) => {
     let power = str.length - 1;
     let res = 0;
     let arrayOfStrings = str.split('').map(str => str.toUpperCase());
-    console.log(arrayOfStrings);
     for (let idx = 0; idx < arrayOfStrings.length; idx++) {
         if (Object.keys(HEXADECIMAL_DIGITS).includes(arrayOfStrings[idx])) {
             res += HEXADECIMAL_DIGITS[arrayOfStrings[idx]] * Math.pow(16, power);
