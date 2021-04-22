@@ -5,6 +5,7 @@
 // Your function should do this the old-fashioned way and calculate the result by analyzing the characters in the string.
 
 let str = "2781";
+let value = 0; 
 let num;
 
 const DIGITS = {
@@ -20,12 +21,12 @@ const DIGITS = {
   9: 9
 };
 
-let value = 0; 
-for (let i = 0; i < str.length; i++) {
-  num = Object.values(DIGITS).find(num => num == str[i]);
-  value = (value * 10) + num;
+let stringToInteger = (str) => {
+  for (let i = 0; i < str.length; i++) {
+    num = Object.values(DIGITS).find(num => num == str[i]);
+    value = (value * 10) + num;
+  }
+  return value;
 }
-console.log(value);
-return num;
 
-
+console.log(stringToInteger(str));
