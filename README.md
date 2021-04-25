@@ -1,2 +1,1 @@
-# JS101
-All my code is in **master** branch.
+This repo is all about **Launch School - JS101** tasks and assignments. 
