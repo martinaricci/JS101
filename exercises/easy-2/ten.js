@@ -23,10 +23,10 @@ const DIGITS = {
   9: 9
 };
 
-let value;
-let num = 0;
 
 function stringToInteger(str) {
+  let value;
+  let num = 0;
   let strOfDigits = str.split('');
   strOfDigits[0] === '-' || strOfDigits[0] === '+' ? strOfDigits.shift() : strOfDigits;
 
@@ -44,4 +44,4 @@ function stringToInteger(str) {
   return num;
 }
 
-console.log(stringToInteger("+4391"));
+console.log(stringToInteger("-4391"));
