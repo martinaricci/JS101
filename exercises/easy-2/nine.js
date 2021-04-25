@@ -23,7 +23,8 @@ const DIGITS = {
 
 let stringToInteger = (str) => {
   for (let i = 0; i < str.length; i++) {
-    num = Object.values(DIGITS).find(num => num == str[i]);
+    num = Object.values(DIGITS).find(num => num === DIGITS[str[i]]);
+    console.log(num);
     value = (value * 10) + num;
   }
   return value;
