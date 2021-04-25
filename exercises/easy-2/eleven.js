@@ -1,28 +1,35 @@
-// Write a function that converts a non-negative integer value (e.g., 0, 1, 2, 3, and so on) to the string representation of that integer.
+// Convert a Number to a String!
+// ----------------------------------
+// input: number
+// output: string
 
-// You may not use any of the standard conversion functions available in JavaScript, such as String(), Number.prototype.toString, or an expression such as '' + number. Your function should do this the old-fashioned way and construct the string by analyzing and manipulating the number.
+// Data type: object
+// declare a variable 'str' that will be assigned to the returned value of the function
+// get the individual digits of the whole number and check if each of this digit is equal to the values of the object reprenting a list of keys/values from 0 to 9.
+// if it is, str += the key of the object value
+// return 'str'
 
-integerToString = (num) => {
-    // let arrOfNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
-    let strOfNum = '';
-    do {
-        remainder = num % 10;
-        console.log(num);
-        Math.floor(num / 10);
-        let strConcat = num + strConcat;
-        console.log(strConcat);
-    } while (num >= 0);
-
-    // while (num >= 0) {
-    //     num = num % 10;
-    //     console.log(num)
-    //     let strConcat = strOfNum.concat(num);
-    //     console.log(strConcat);
-    //     // let lastDigit = Math.floor(num / 10);
-    //     // console.log(lastDigit);
-    //     // console.log(num);
-    // }
+const DIGITS = {
+    0: 0,
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 4,
+    5: 5,
+    6: 6,
+    7: 7,
+    8: 8,
+    9: 9
 };
 
-integerToString(4321);
+let integerToString = (num) => {
+    let str = '';
+    do {
+        str = Object.keys(DIGITS).find(key => DIGITS[key] === num % 10) + str;
+        num = Math.floor(num / 10);
+    } while (num > 0);
+
+    return str;
+};
+
+console.log(integerToString(4254305));
