@@ -1,25 +1,45 @@
-const DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+// Convert a Signed Number to a String!
+// ------------------------------------
 
-function integerToString(number) {
-  let result = '';
+// input: number 
+// iutput: string
 
+const DIGITS = {
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+  6: 6,
+  7: 7,
+  8: 8,
+  9: 9
+};
+
+let integerToString = (num) => {
+  let str = '';
   do {
-    let remainder = number % 10;
-    number = Math.floor(number / 10);
+    str = Object.keys(DIGITS).find(key => DIGITS[key] === num % 10) + str;
+    num = Math.floor(num / 10);
+  } while (num > 0);
 
-    result = DIGITS[remainder] + result;
-  } while (number > 0);
+  return str;
+};
 
-  return result;
-}
-
-function signedIntegerToString(number) {
-  switch (Math.sign(number)) {
+let signedIntegerToString = (num) => {
+  let str = '';
+  switch (Math.sign(num)) {
+    case 1:
+      str = `+${integerToString(num)}`;
+      break;
     case -1:
-      return `-${integerToString(-number)}`;
-    case +1:
-      return `+${integerToString(number)}`;
+      str = `-${integerToString(-num)}`;
+      break;
     default:
-      return integerToString(number);
+      str = '0';
   }
+  return str;
 }
+
+console.log(signedIntegerToString(-2414142144));
