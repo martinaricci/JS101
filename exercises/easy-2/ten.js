@@ -1,41 +1,47 @@
-// Write a function that takes a string of digits, and returns the appropriate number as an integer. The string may have a leading + or - sign; if the first character is a +, your function should return a positive number; if it is a -, your function should return a negative number. If no sign is given, you should return a positive number.
+// Convert a String to a Signed valueber!
 
-// You may not use any of the standard conversion methods available in JavaScript, such as parseInt() and Number(). You may, however, use the stringToInteger() function from the previous lesson.
+// PSEUDOCODE
+// input: string
+// output: number
 
-function stringToInteger(string) {
-    const DIGITS = {
-        0: 0,
-        1: 1,
-        2: 2,
-        3: 3,
-        4: 4,
-        5: 5,
-        6: 6,
-        7: 7,
-        8: 8,
-        9: 9
-    };
-    let arrOfStrings = string.split("");
-    let newArr = [];
-    for (var i = 0; i < arrOfStrings.length; i++) {
-      if (arrOfStrings[i] === '-') {
-          negNum = arrOfStrings[i] + arrOfStrings[i + 1];
-          arrOfStrings.splice(0, 2);
-          newArr.push(negNum);
-          console.log(newArr);
-        }
-        newArr.push(arrOfStrings[i]);
+// split str and loop through the str of digits
+// if str[0] is equal to '-' or '+', remove it
+// convert a str of digits to a number
+// if the original str had '-' return -number
+// else number
+
+const DIGITS = {
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+  6: 6,
+  7: 7,
+  8: 8,
+  9: 9
+};
+
+let value;
+let num = 0;
+
+function stringToInteger(str) {
+  let strOfDigits = str.split('');
+  strOfDigits[0] === '-' || strOfDigits[0] === '+' ? strOfDigits.shift() : strOfDigits;
+
+  for (let idx = 0; idx < strOfDigits.length; idx++) {
+    value = Object.values(DIGITS).find(value => value === DIGITS[strOfDigits[idx]]);
+    if (value === undefined) {
+      return 'Not a valid number';
     }
-    console.log(newArr);
+    num = (num * 10) + value;
+  }
 
-    let arrayOfDigits = arrOfStrings.map(char => {
-        if (char === '-' + Object.keys(DIGITS).find(key => DIGITS[key] === char)) {
-            console.log(char);
-        } else {
-            return DIGITS[char];
-        }
-    });
-    console.log(arrayOfDigits);
+  if (str[0] === '-') {
+    return -num;
+  }
+  return num;
 }
 
-console.log(stringToInteger("-4321"));
+console.log(stringToInteger("+4391"));
