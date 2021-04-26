@@ -13,7 +13,6 @@ let findFibonacciIndexByLength = length => {
     let index = 1;
     let res;
     for (let i = 0; num >= 0; i++) {
-        // console.log(i);
         let fibonacciNum = fibonacci(num);
         fibonacciNumToStr = fibonacciNum.toString();
         if (fibonacciNum.toString().length === length) {
@@ -26,7 +25,6 @@ let findFibonacciIndexByLength = length => {
     return index;
 }
 
-// console.log(findFibonacciIndexByLength(2));       // 7
-// console.log(findFibonacciIndexByLength(10));      // 45
+console.log(findFibonacciIndexByLength(2));       // 7
+console.log(findFibonacciIndexByLength(10));      // 45
 console.log(findFibonacciIndexByLength(16));      // 74
-console.log(fibonacci(16));
