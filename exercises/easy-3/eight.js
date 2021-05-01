@@ -21,6 +21,6 @@ let getGrade = (score1, score2, score3) => {
     total = Math.round((score1 + score2 + score3) / 3);
 
     return Object.keys(SCORES).find(key => SCORES[key][0] <= total && (SCORES[key][1] > total || SCORES[key][1] === total))
-}
+};
 
 console.log(getGrade(95, 90, 93));
