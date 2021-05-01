@@ -3,13 +3,13 @@
 let cleanUp = (str) => {
     let charactersOnly = str.split('').map(char => char.match(/\W/g) ? ' ' : char);
 
-    let finalString = '';
+    let cleanText = '';
     charactersOnly.forEach(character => {
-        if (!(finalString[finalString.length - 1] === ' ' && character === ' ')) {
-            finalString += character;
+        if (!(cleanText[cleanText.length - 1] === ' ' && character === ' ')) {
+            cleanText += character;
         }
     });
-    return finalString;
+    return cleanText;
 };
 
 console.log(cleanUp("---What's my +*& line?"))
