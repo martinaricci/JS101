@@ -8,22 +8,14 @@
 // Input: number
 // Output: string
 
-let century = (num) => {
-  let numDividedBy100 = num / 100;
-  let century = '';
+let century = '';
 
-  if (!Number.isInteger(numDividedBy100)) {
-    century = Math.floor(numDividedBy100 + 1).toString();
-  } else {
-    century = (numDividedBy100).toString();
-  }
+let catchWithTh = (lastTwo) => {
+  return (lastTwo === '11' || lastTwo === '12' || lastTwo === '13');
+};
 
-  if (century.slice(-2) === '11' || century.slice(-2) === '12' || century.slice(-2) === '13') {
-    century += 'th';
-    return century;
-  }
-
-  switch (century[century.length - 1]) {
+let centurySuffix = (lastDigit) => {
+  switch (lastDigit) {
     case '1':
       century += 'st';
       break;
@@ -33,19 +25,38 @@ let century = (num) => {
     case '3':
       century += 'rd';
       break;
+    case 'h':
+      century = century;
+      break;
     default:
       century += 'th';
   }
+};
 
+let calculateCentury = (num) => {
+  let numDividedBy100 = num / 100;
+
+  if (!Number.isInteger(numDividedBy100)) {
+    century = Math.floor(numDividedBy100 + 1).toString();
+  } else {
+    century = (numDividedBy100).toString();
+  }
+  
+  if (catchWithTh(century.slice(-2))) {
+    century += 'th';
+  }
+
+  centurySuffix(century[century.length - 1]);
+  
   return century;
 };
 
-console.log(century(2000)); // "20th"
-console.log(century(2001)); // "21st"
-console.log(century(1965)); // "20th"
-console.log(century(256)); // "3rd"
-console.log(century(5)); // "1st"
-console.log(century(10103)); // "102nd"
-console.log(century(1052)); // "11th"
-console.log(century(1127)); // "12th"
-console.log(century(11201)); // "113th"
+console.log(calculateCentury(2000)); // "20th"
+console.log(calculateCentury(2001)); // "21st"
+console.log(calculateCentury(1965)); // "20th"
+console.log(calculateCentury(256)); // "3rd"
+console.log(calculateCentury(5)); // "1st"
+console.log(calculateCentury(10103)); // "102nd"
+console.log(calculateCentury(1052)); // "11th"
+console.log(calculateCentury(1127)); // "12th"
+console.log(calculateCentury(11201)); // "113th"
